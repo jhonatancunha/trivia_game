@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 
 class BottomBart extends StatefulWidget {
-  const BottomBart({ Key? key }) : super(key: key);
+  const BottomBart({ Key? key  }) : super(key: key);
+
 
   @override
   _BottomBartState createState() => _BottomBartState();
 }
 
 class _BottomBartState extends State<BottomBart> {
+  String stateMessage = '';
+  final chatMessage = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    chatMessage.dispose();
+    super.dispose();
+  }
+  
+    
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -15,10 +28,16 @@ class _BottomBartState extends State<BottomBart> {
       color: Colors.white,
       child: Row(
       children:  <Widget>[
-       const Flexible(
+      Flexible(
         child: TextField(
-          style: TextStyle(color: Colors.black),
-          decoration: InputDecoration(
+          controller: chatMessage,
+          onChanged: (text){
+            setState(() {
+              stateMessage = text;
+            });
+          },
+          style: const TextStyle(color: Colors.black),
+          decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.grey, 
@@ -45,7 +64,7 @@ class _BottomBartState extends State<BottomBart> {
           height: 50,
           child: TextButton(
             onPressed: () {
-              print("pressionou");
+              print(stateMessage);
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blue),
