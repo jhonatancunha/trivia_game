@@ -54,11 +54,7 @@ class LeftMenu extends StatelessWidget {
             ],
           )),
           // BOTTOM SIDE
-          Container(
-            height: 84,
-            width: double.infinity,
-            color: Colors.blue
-          )
+          const BottomBart()
         ]
       )
     );
