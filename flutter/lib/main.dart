@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:trivia/screen/game.dart';
 import 'package:trivia/widgets/widgets.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 // Models
 import 'dart:convert';
@@ -23,7 +24,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
    
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class LeftMenu extends StatefulWidget {
   const LeftMenu({ Key? key }) : super(key: key);
 
@@ -55,8 +54,30 @@ class LeftMenu extends StatefulWidget {
 
 
 class _LeftMenuState extends State<LeftMenu> {
-
   final List<Player> _players = <Player>[];
+  late IO.Socket socket;
+  
+  @override
+  void initState() {
+    super.initState();
+    connectSocket();
+  }
+
+
+  void connectSocket(){
+    socket = IO.io('http://127.0.0.1:5000',
+      IO.OptionBuilder()
+      .setTransports(['websocket'])// for Flutter or Dart VM
+      .disableAutoConnect() 
+      .build());
+    
+    socket.connect();
+
+    socket.emit('sendChatMessage', 'olateste');
+    socket.on('returnMessage', (data) => print(data));
+
+  }
+
 
   List<Player> fetchNotes(){
     String arrayOfObjects = '{"players":[{"nickname": "Jhonatan", "score": 10},{"nickname": "Jhonatan2 ", "score": 100}]}';
