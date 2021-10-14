@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:trivia/entities/player.dart';
 
 class SideBar extends StatelessWidget {
-  final players;
-  const SideBar ({ Key? key, this.players }) : super(key: key);
+  final List<Player> players;
+  const SideBar ({ Key? key, required this.players }) : super(key: key);
 
 
   @override
@@ -11,7 +12,7 @@ class SideBar extends StatelessWidget {
     return Container(
       height: double.infinity,
       width: 280,
-      color: Colors.white,
+      color: Colors.red,
       child: ListView.builder(
         itemCount: players.length,
         itemBuilder: (BuildContext contex, int index){
