@@ -7,12 +7,11 @@ class GameBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint(players.length);
-    return Expanded(
-      child: Container(
+    return const Expanded(
+      child: SizedBox(
         height: 300,
         width: double.infinity,
-        color: Colors.orange,
-        child: const Text("game board")
+        child: Text("game board")
       )
     );
   }

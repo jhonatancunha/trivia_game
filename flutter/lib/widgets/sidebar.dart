@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trivia/entities/player.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 class SideBar extends StatelessWidget {
   final List<Player> players;
@@ -9,15 +10,25 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint(players.length);
-    return Container(
-      height: double.infinity,
+    return SizedBox(
+      // height: double.infinity,
       width: 280,
-      color: Colors.red,
-      child: ListView.builder(
-        itemCount: players.length,
-        itemBuilder: (BuildContext contex, int index){
-          return Text(players[index].nickname,style: TextStyle(color: Colors.black.withOpacity(0.6)));
-        }
+      child: Container(
+        color: Colors.red,
+        child: Column(
+          children: [
+          WindowTitleBarBox(
+            child: MoveWindow()
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: players.length,
+            itemBuilder: (BuildContext contex, int index){
+              return Text(players[index].nickname,style: TextStyle(color: Colors.black.withOpacity(0.6)));
+            }
+          )
+        ],)
+
       )
     );
   }

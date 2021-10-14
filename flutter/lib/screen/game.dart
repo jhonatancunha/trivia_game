@@ -61,13 +61,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      // ),
-      body: SizedBox(
+    return SizedBox(
         child: Column(
         children: [
           // LEFT SIDE
@@ -82,8 +76,6 @@ class _GameScreenState extends State<GameScreen> {
         ]
         ),
         width: double.infinity,
-        
-    )
     );
   }
 }

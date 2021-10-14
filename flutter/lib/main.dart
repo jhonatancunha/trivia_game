@@ -4,16 +4,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:trivia/screen/game.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  if(!kIsWeb && (Platform.isMacOS || Platform.isLinux || Platform.isWindows)) {
-    await DesktopWindow.setMinWindowSize(const Size(1200, 800));
-  }
-
-
+  // WidgetsFlutterBinding.ensureInitialized();
+  // if(!kIsWeb && (Platform.isMacOS || Platform.isLinux || Platform.isWindows)) {
+  //   await DesktopWindow.setMinWindowSize(const Size(1200, 800));
+  // }
   runApp(const MyApp());
+
+  doWhenWindowReady(() {
+  const initialSize = Size(1200, 800);
+  appWindow.minSize = initialSize;
+  appWindow.size = initialSize;
+  appWindow.alignment = Alignment.center;
+  appWindow.show();
+});
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +40,14 @@ class MyApp extends StatelessWidget {
 
 
       ),
-      home:  const GameScreen()
+      home:  Scaffold(
+        extendBodyBehindAppBar: true,
+        body: WindowBorder(
+          width: 1,
+          color: const Color(0XFF805306),
+          child: const GameScreen(),
+        )
+      )
     );
   }
 }

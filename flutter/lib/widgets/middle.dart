@@ -12,22 +12,14 @@ class Middle extends StatelessWidget {
       child: Container(
         height: double.infinity,
         width: 280,
+        color: Colors.orange,
         child: Column(
           children:  const <Widget> [
+            WindowTitleBar(),
             GameBoard(),
             Chat(),
           ],
-        ),
-        decoration:  const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter, 
-              end: Alignment.bottomCenter, 
-              colors: [
-                Colors.black,
-                Colors.grey,
-              ],
-            )
-          )
+        )
       )
     );
   }
