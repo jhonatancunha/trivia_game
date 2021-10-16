@@ -18,13 +18,24 @@ class _GameScreenState extends State<GameScreen> {
   final List<Player> _players = <Player>[];
   late IO.Socket socket;
   
+  Player jogador = Player('Usuario 1', 0);
+
   @override
   void initState() {
     super.initState();
+    print("iniciando");
     connectSocket();
   }
 
+  @override
+  @protected
+  @mustCallSuper
+  void dispose(){
+    print("fechando");
+  }
+
   void connectSocket(){
+    print("tentando conectar");
     socket = IO.io('http://127.0.0.1:5000',
       IO.OptionBuilder()
       .setTransports(['websocket'])// for Flutter or Dart VM
@@ -33,10 +44,18 @@ class _GameScreenState extends State<GameScreen> {
     
     socket.connect();
 
-    socket.emit('sendChatMessage', 'olateste');
-    socket.on('returnMessage', (data) => print(data));
+    socket.onConnect((_) {
+      socket.emit('join', jogador.toJson());
+      // socket.emit('left', '');
+    });
+
+
+    // socket.emit('sendChatMessage', 'olateste');
+    // socket.on('returnMessage', (data) => print(data));
 
   }
+
+  
 
   List<Player> fetchNotes(){
     String arrayOfObjects = '{"players":[{"nickname": "Jhonatan", "score": 10},{"nickname": "Jhonatan", "score": 10},{"nickname": "Jhonatan2 ", "score": 100}]}';
@@ -61,6 +80,11 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    socket.on('newPersonInGame', (message) {
+      print("entrou man");
+      print(message);
+    });
     return SizedBox(
         child: Column(
         children: [

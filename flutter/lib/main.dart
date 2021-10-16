@@ -1,8 +1,5 @@
 // Flutter
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:trivia/screen/game.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 

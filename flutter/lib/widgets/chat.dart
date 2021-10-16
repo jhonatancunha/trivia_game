@@ -9,7 +9,7 @@ class Chat extends StatelessWidget {
     // debugPrint(players.length);
     return Expanded(
       child: Container(
-        height: 300,
+        height: 200,
         color: Colors.green,
         width: double.infinity,
         child: const Text("chat")
