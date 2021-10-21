@@ -1,6 +1,6 @@
 class Player {
   String nickname;
-  int score;
+  String score;
 
   Player(this.nickname, this.score);
 

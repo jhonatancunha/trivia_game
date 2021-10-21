@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trivia/widgets/widgets.dart';
+import 'package:trivia/screen/game.dart';
+
+
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
@@ -12,14 +16,17 @@ class _InitialScreenState extends State<InitialScreen> {
   String _nickname = '';
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Form(
+      key: _formKey,
+      child: Column(children: [
+        const WindowTitleBar(),
+        Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +46,6 @@ class _InitialScreenState extends State<InitialScreen> {
                   if (value == null || value.isEmpty) {
                     return "Por favor, digite alguma coisa";
                   }
-
                   _nickname = value;
                   return null;
                 },
@@ -55,7 +61,10 @@ class _InitialScreenState extends State<InitialScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      print(_nickname);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  GameScreen(nickname: _nickname)),
+                      );
                     }
                   },
                   
@@ -66,6 +75,7 @@ class _InitialScreenState extends State<InitialScreen> {
           ],
         ),
       ),
-    );
+      ],)
+    ));
   }
 }

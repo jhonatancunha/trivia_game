@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trivia/widgets/widgets.dart';
+import 'package:trivia/entities/message.dart';
 
 class Middle extends StatelessWidget {
-  const Middle ({ Key? key }) : super(key: key);
+
+  final List<Message> messages;
+  const Middle ({ Key? key, required this.messages }) : super(key: key);
 
 
   @override
@@ -14,10 +17,10 @@ class Middle extends StatelessWidget {
         width: 280,
         color: Colors.orange,
         child: Column(
-          children:  const <Widget> [
-            WindowTitleBar(),
-            GameBoard(),
-            Chat(),
+          children:   <Widget> [
+            const WindowTitleBar(),
+            const GameBoard(),
+            Chat(messages: messages),
           ],
         )
       )

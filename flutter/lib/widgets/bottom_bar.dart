@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BottomBart extends StatefulWidget {
-  final Function getNewPlayer;
-  const BottomBart({ Key? key, required this.getNewPlayer  }) : super(key: key);
+  final Function sendMessage;
+  const BottomBart({ Key? key, required this.sendMessage  }) : super(key: key);
 
 
   @override
@@ -65,7 +65,7 @@ class _BottomBartState extends State<BottomBart> {
           height: 50,
           child: TextButton(
             onPressed:() {
-            widget.getNewPlayer(stateMessage);
+            widget.sendMessage(stateMessage);
             } ,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.blue),

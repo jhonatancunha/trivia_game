@@ -24,7 +24,10 @@ class SideBar extends StatelessWidget {
             shrinkWrap: true,
             itemCount: players.length,
             itemBuilder: (BuildContext contex, int index){
-              return Text(players[index].nickname,style: TextStyle(color: Colors.black.withOpacity(0.6)));
+              return Column(children: [
+                Text(players[index].nickname, style: TextStyle(color: Colors.black.withOpacity(0.6))),
+                Text(players[index].score, style: TextStyle(color: Colors.black.withOpacity(0.6)))
+              ],);
             }
           )
         ],)

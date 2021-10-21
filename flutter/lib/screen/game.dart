@@ -5,10 +5,11 @@ import 'package:trivia/widgets/widgets.dart';
 // Models
 import 'dart:convert';
 import 'package:trivia/entities/player.dart';
+import 'package:trivia/entities/message.dart';
 
 class GameScreen extends StatefulWidget {
-
-  const GameScreen({ Key? key }) : super(key: key);
+  final String nickname;
+  const GameScreen( { Key? key, required this.nickname}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -16,16 +17,82 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   final List<Player> _players = <Player>[];
-  late IO.Socket socket;
-  
-  Player jogador = Player('Usuario 1', 0);
+  final List<Message> _messages = <Message>[];
+  late final IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
-    print("iniciando");
-    connectSocket();
+    initSocket();
   }
+
+  void initSocket(){
+    print("iniciando socket");
+    socket = IO.io('http://127.0.0.1:8000',
+      IO.OptionBuilder()
+      .setTransports(['websocket']) //for Flutter or Dart VM
+      .disableAutoConnect() 
+      .build()
+    );
+    
+
+    socket.connect();
+    socket.onConnect((_) {
+      joinRoom(widget.nickname);
+    });
+
+
+    socket.onError((_) {
+      print("erro");
+    });
+
+    socket.on('messageJoin', (msg) {
+      print(msg);
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+      setState((){
+        _messages.add(objMessage);
+      });
+    });
+
+    socket.on('newPlayer', (player){
+      print(player);
+      var score = json.decode(player.toString())['score'];
+      var nickname = json.decode(player.toString())['nickname'];
+      Player newPlayer = Player(nickname, score);
+
+      setState((){
+        _players.add(newPlayer);
+      });
+    });
+
+
+    socket.on('messageChat', (msg) {
+      print(msg);
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+      setState((){
+        _messages.add(objMessage);
+      });
+    });
+  }
+
+    
+  void joinRoom(nickname){
+    Player player = Player(nickname, "0");
+    socket.emit('join', player.toJson());
+  }
+
+  void sendMessage(message){
+    socket.emit('sendChatMessage', message);
+  }
+
 
   @override
   @protected
@@ -34,72 +101,25 @@ class _GameScreenState extends State<GameScreen> {
     print("fechando");
   }
 
-  void connectSocket(){
-    print("tentando conectar");
-    socket = IO.io('http://127.0.0.1:5000',
-      IO.OptionBuilder()
-      .setTransports(['websocket'])// for Flutter or Dart VM
-      .disableAutoConnect() 
-      .build());
-    
-    socket.connect();
-
-    socket.onConnect((_) {
-      socket.emit('join', jogador.toJson());
-      // socket.emit('left', '');
-    });
-
-
-    // socket.emit('sendChatMessage', 'olateste');
-    // socket.on('returnMessage', (data) => print(data));
-
-  }
-
-  
-
-  List<Player> fetchNotes(){
-    String arrayOfObjects = '{"players":[{"nickname": "Jhonatan", "score": 10},{"nickname": "Jhonatan", "score": 10},{"nickname": "Jhonatan2 ", "score": 100}]}';
-    var players = <Player>[];
-
-    var arrayOfPlayers = json.decode(arrayOfObjects)['players'];
-
-     for(var item in arrayOfPlayers){
-       players.add(Player.fromJson(item));
-     }
-
-    return players;
-  }
-
-    void _getNewPlayer(teste){
-      print("Mensagem $teste");
-      List<Player> data = fetchNotes();
-      setState((){
-        _players.addAll(data);
-      });
-    } 
-
   @override
   Widget build(BuildContext context) {
-
-    socket.on('newPersonInGame', (message) {
-      print("entrou man");
-      print(message);
-    });
-    return SizedBox(
-        child: Column(
-        children: [
-          // LEFT SIDE
-          Expanded(child: Row(
-            children:  [
-              SideBar(players: _players),
-              const Middle(),
-            ],
-          )),
-          // BOTTOM SIDE
-          BottomBart(getNewPlayer: _getNewPlayer)
-        ]
-        ),
-        width: double.infinity,
+    return Scaffold(
+      body: SizedBox(
+          child: Column(
+          children: [
+            // LEFT SIDE
+            Expanded(child: Row(
+              children:  [
+                SideBar(players: _players),
+                Middle(messages: _messages),
+              ],
+            )),
+            // BOTTOM SIDE
+            BottomBart(sendMessage: sendMessage)
+          ]
+          ),
+          width: double.infinity,
+      )
     );
   }
 }

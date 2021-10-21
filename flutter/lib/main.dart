@@ -1,8 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
-// import 'package:trivia/screen/game.dart';
-import 'package:trivia/screen/initialScreen.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:trivia/screen/initialScreen.dart';
 
 
 void main() async {
@@ -23,7 +22,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-   
+
+
   @override
   Widget build(BuildContext context) {
 
