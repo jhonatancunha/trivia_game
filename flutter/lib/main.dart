@@ -1,6 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:trivia/screen/game.dart';
+// import 'package:trivia/screen/game.dart';
+import 'package:trivia/screen/initialScreen.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 
@@ -12,7 +13,7 @@ void main() async {
   runApp(const MyApp());
 
   doWhenWindowReady(() {
-  const initialSize = Size(1200, 800);
+  const initialSize = Size(800, 600);
   appWindow.minSize = initialSize;
   appWindow.size = initialSize;
   appWindow.alignment = Alignment.center;
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         body: WindowBorder(
           width: 1,
           color: const Color(0XFF805306),
-          child: const GameScreen(),
+          // child: const GameScreen(),
+          child: const InitialScreen(),
         )
       )
     );
