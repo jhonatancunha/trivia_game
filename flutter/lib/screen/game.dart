@@ -33,11 +33,12 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
     websocket.init(widget.nickname);
 
     websocket.socket.on('messageJoin', (msg) {
-      print(msg);
+      print("entro $msg");
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
+
 
       setState((){
         _messages.add(objMessage);

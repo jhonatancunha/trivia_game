@@ -1,9 +1,12 @@
 import socketio
 
+
+#ENTITES
+
 # create a Socket.IO server
 sio = socketio.Server(async_mode='gevent', logger=True, engineio_logger=True)
-
 ROOM = '123'
+
 
 # @sio.event
 # def connect(sid, environ, auth):
