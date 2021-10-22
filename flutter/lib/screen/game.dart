@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:trivia/service/web_socket.dart';
 import 'package:trivia/widgets/widgets.dart';
 
 // Models
 import 'dart:convert';
 import 'package:trivia/entities/player.dart';
 import 'package:trivia/entities/message.dart';
+
 
 class GameScreen extends StatefulWidget {
   final String nickname;
@@ -15,38 +16,23 @@ class GameScreen extends StatefulWidget {
   _GameScreenState createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
   final List<Player> _players = <Player>[];
   final List<Message> _messages = <Message>[];
-  late final IO.Socket socket;
+  final WebSocket websocket = WebSocket();
+
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     initSocket();
   }
 
   void initSocket(){
-    print("iniciando socket");
-    socket = IO.io('http://127.0.0.1:8000',
-      IO.OptionBuilder()
-      .setTransports(['websocket']) //for Flutter or Dart VM
-      .disableAutoConnect() 
-      .build()
-    );
-    
+    websocket.init(widget.nickname);
 
-    socket.connect();
-    socket.onConnect((_) {
-      joinRoom(widget.nickname);
-    });
-
-
-    socket.onError((_) {
-      print("erro");
-    });
-
-    socket.on('messageJoin', (msg) {
+    websocket.socket.on('messageJoin', (msg) {
       print(msg);
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
@@ -58,7 +44,7 @@ class _GameScreenState extends State<GameScreen> {
       });
     });
 
-    socket.on('newPlayer', (player){
+    websocket.socket.on('newPlayer', (player){
       print(player);
       var score = json.decode(player.toString())['score'];
       var nickname = json.decode(player.toString())['nickname'];
@@ -70,7 +56,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
 
-    socket.on('messageChat', (msg) {
+    websocket.socket.on('messageChat', (msg) {
       print(msg);
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
@@ -84,21 +70,19 @@ class _GameScreenState extends State<GameScreen> {
   }
 
     
-  void joinRoom(nickname){
-    Player player = Player(nickname, "0");
-    socket.emit('join', player.toJson());
-  }
-
-  void sendMessage(message){
-    socket.emit('sendChatMessage', message);
-  }
+  
 
 
   @override
-  @protected
-  @mustCallSuper
   void dispose(){
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
     print("fechando");
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
   }
 
   @override
@@ -115,7 +99,7 @@ class _GameScreenState extends State<GameScreen> {
               ],
             )),
             // BOTTOM SIDE
-            BottomBart(sendMessage: sendMessage)
+            BottomBart(sendMessage: websocket.sendMessage)
           ]
           ),
           width: double.infinity,

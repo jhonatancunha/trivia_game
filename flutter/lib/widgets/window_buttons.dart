@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/services.dart';
+import 'package:trivia/service/web_socket.dart';
 
 var buttonColors = WindowButtonColors(
   iconNormal: const Color(0xFF805306),
@@ -19,7 +21,10 @@ class WindowButtons extends StatelessWidget {
       children: [
         MinimizeWindowButton(colors: buttonColors),
         MaximizeWindowButton(colors: buttonColors),
-        CloseWindowButton()
+        CloseWindowButton(onPressed: () {
+          WebSocket().disconnect();
+          SystemNavigator.pop();
+        })
       ],
     );
   }
