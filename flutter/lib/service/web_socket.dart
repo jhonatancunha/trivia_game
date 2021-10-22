@@ -32,7 +32,7 @@ class WebSocket{
   }
 
   void disconnect(){
-    print("fechando");
+    socket.emit('left');
   }
 
   factory WebSocket() {

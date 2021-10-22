@@ -25,11 +25,11 @@ def join(sid, environ):
   sio.emit('messageJoin', '{"message": " entrou na sala.", "nickname": "%s", "type":"join"}' % nickname, room=ROOM)
   
 @sio.on('left')
-def left(sid, environ):
+def left(sid):
   session = sio.get_session(sid)
   room = session['room']
   nickname = session['nickname']
-  sio.leave_room(room)
+  sio.leave_room(sid, room)
   sio.emit('personLeaveTheGame', '{"message": " saiu da sala.", "nickname": "%s", "type":"leave"}' % nickname, room=room)
 
 
