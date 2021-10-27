@@ -4,6 +4,7 @@ import 'package:trivia/entities/player.dart';
 class WebSocket{
   static final WebSocket _singleton = WebSocket._internal();
   late final IO.Socket socket;
+  bool isSocketOn = false;
 
   void joinRoom(nickname){
     Player player = Player(nickname, "0");
@@ -22,6 +23,7 @@ class WebSocket{
 
       socket.connect();
       socket.onConnect((_) {
+        isSocketOn = true;
         joinRoom(nickname);
       });
   }
@@ -31,8 +33,14 @@ class WebSocket{
     socket.emit('sendChatMessage', message);
   }
 
+  IO.Socket getSocket() {
+    return socket;
+  }
+
   void disconnect(){
-    socket.emit('left');
+    if(isSocketOn){
+      socket.emit('left');
+    }
   }
 
   factory WebSocket() {

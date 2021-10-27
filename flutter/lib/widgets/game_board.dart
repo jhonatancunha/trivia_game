@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:hexcolor/hexcolor.dart';
+
+
 class GameBoard extends StatelessWidget {
   const GameBoard ({ Key? key }) : super(key: key);
 
@@ -7,11 +10,16 @@ class GameBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint(players.length);
-    return const Expanded(
-      child: SizedBox(
-        height: 300,
+    return SizedBox(
+      child: Container(
+         decoration:  BoxDecoration(
+           border: Border(
+            bottom: BorderSide(width: 2, color: HexColor('#393B4B')),
+        ),
+        ),
+        height: 250,
         width: double.infinity,
-        child: Text("game board")
+        child: const Text("game board")
       )
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:hexcolor/hexcolor.dart';
+
 class BottomBart extends StatefulWidget {
   final Function sendMessage;
   const BottomBart({ Key? key, required this.sendMessage  }) : super(key: key);
@@ -26,7 +28,12 @@ class _BottomBartState extends State<BottomBart> {
   Widget build(BuildContext context) {
     return  Container(
       padding: const EdgeInsets.all(5),
-      color: Colors.white,
+      decoration:  BoxDecoration(
+            color: HexColor("#1F1D2B"),
+            border: Border(
+              top: BorderSide(width: 2, color: HexColor('#393B4B')),
+          ),
+      ),
       child: Row(
       children:  <Widget>[
       Flexible(
@@ -37,20 +44,22 @@ class _BottomBartState extends State<BottomBart> {
               stateMessage = text;
             });
           },
-          style: const TextStyle(color: Colors.black),
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
+          style: const TextStyle(color: Colors.white),
+          decoration:  InputDecoration(
+            filled: true,
+            fillColor: HexColor('#2E303F'),
+            enabledBorder:  OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.grey, 
+                color: HexColor('#2E303F'), 
                 width: 1.0
               ),
             ),
             labelText: 'Digite aqui...',
-            labelStyle: TextStyle(
-              color: Colors.blue,
-              fontWeight: FontWeight.w600
+            labelStyle: const TextStyle(
+              color: Colors.white,
+                fontStyle: FontStyle.normal,
             ),
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
           ),
         )
       ),
@@ -68,7 +77,7 @@ class _BottomBartState extends State<BottomBart> {
             widget.sendMessage(stateMessage);
             } ,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              backgroundColor: MaterialStateProperty.all(HexColor("#6B5FCD")),
             ),
             child: const Text(
               "ENVIAR",

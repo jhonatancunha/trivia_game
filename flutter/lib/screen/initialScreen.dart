@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trivia/widgets/widgets.dart';
 import 'package:trivia/screen/game.dart';
 
+import 'package:hexcolor/hexcolor.dart';
 
 
 class InitialScreen extends StatefulWidget {
@@ -22,7 +23,9 @@ class _InitialScreenState extends State<InitialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Form(
+    return Scaffold(
+      backgroundColor: HexColor("#1F1D2B"),
+      body: Form(
       key: _formKey,
       child: Column(children: [
         const WindowTitleBar(),
@@ -67,7 +70,9 @@ class _InitialScreenState extends State<InitialScreen> {
                       );
                     }
                   },
-                  
+                  style: ElevatedButton.styleFrom(
+                    primary: HexColor("#6B5FCD"),
+                  ),
                   child: const Text('Entrar'),
                 ),
               ),

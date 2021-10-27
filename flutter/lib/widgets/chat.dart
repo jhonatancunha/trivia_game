@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trivia/entities/message.dart';
 
+import 'package:hexcolor/hexcolor.dart';
+
+
 class Chat extends StatelessWidget {
   final List<Message> messages;
   const Chat ({ Key? key, required this.messages }) : super(key: key);
@@ -12,16 +15,9 @@ class Chat extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 200,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xFFBBC9D0),
-                Color(0xFFF0F2F2),
-              ],
-            )
-          ),
+        decoration:  BoxDecoration(
+            color: HexColor("#1F1D2B"),
+        ),
         width: double.infinity,
         child: ListView.builder(
             shrinkWrap: true,
