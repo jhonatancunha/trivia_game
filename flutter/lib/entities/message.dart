@@ -7,8 +7,8 @@ class Message {
 
   Message.fromJson(Map<String, dynamic> json)
       : nickname = json["nickname"],
-      message = json['message'],
-      type = json['type'];
+        message = json['message'],
+        type = json['type'];
 
   Map<String, dynamic> toJson() => {
         'nickname': nickname,

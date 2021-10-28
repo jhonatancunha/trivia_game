@@ -8,16 +8,15 @@ import 'dart:convert';
 import 'package:trivia/entities/player.dart';
 import 'package:trivia/entities/message.dart';
 
-
 class GameScreen extends StatefulWidget {
   final String nickname;
-  const GameScreen( { Key? key, required this.nickname}) : super(key: key);
+  const GameScreen({Key? key, required this.nickname}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
+class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final List<Player> _players = <Player>[];
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
@@ -29,7 +28,7 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
     initSocket();
   }
 
-  void initSocket(){
+  void initSocket() {
     websocket.init(widget.nickname);
 
     websocket.socket.on('messageJoin', (msg) {
@@ -39,39 +38,36 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-
-      setState((){
+      setState(() {
         _messages.add(objMessage);
       });
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('newPlayer', (player){
+    websocket.socket.on('newPlayer', (player) {
       print(player);
       var score = json.decode(player.toString())['score'];
       var nickname = json.decode(player.toString())['nickname'];
       Player newPlayer = Player(nickname, score);
 
-      setState((){
+      setState(() {
         _players.add(newPlayer);
       });
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('personLeaveTheGame', (msg){
+    websocket.socket.on('personLeaveTheGame', (msg) {
       print("saiu $msg");
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-
-      setState((){
+      setState(() {
         _messages.add(objMessage);
       });
       ChatController.scrollDown();
     });
-
 
     websocket.socket.on('messageChat', (msg) {
       print(msg);
@@ -80,19 +76,15 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState((){
+      setState(() {
         _messages.add(objMessage);
       });
       ChatController.scrollDown();
     });
   }
 
-    
-  
-
-
   @override
-  void dispose(){
+  void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
     print("fechando");
@@ -106,22 +98,20 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-          child: Column(
+        body: SizedBox(
+      child: Column(children: [
+        // LEFT SIDE
+        Expanded(
+            child: Row(
           children: [
-            // LEFT SIDE
-            Expanded(child: Row(
-              children:  [
-                SideBar(players: _players),
-                Middle(messages: _messages),
-              ],
-            )),
-            // BOTTOM SIDE
-            BottomBart(sendMessage: websocket.sendMessage)
-          ]
-          ),
-          width: double.infinity,
-      )
-    );
+            SideBar(players: _players),
+            Middle(messages: _messages),
+          ],
+        )),
+        // BOTTOM SIDE
+        BottomBart(sendMessage: websocket.sendMessage)
+      ]),
+      width: double.infinity,
+    ));
   }
 }

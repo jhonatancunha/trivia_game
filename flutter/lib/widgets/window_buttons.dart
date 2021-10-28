@@ -12,7 +12,7 @@ var buttonColors = WindowButtonColors(
 );
 
 class WindowButtons extends StatelessWidget {
-  const WindowButtons ({ Key? key }) : super(key: key);
+  const WindowButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:trivia/screen/initialScreen.dart';
 
-
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // if(!kIsWeb && (Platform.isMacOS || Platform.isLinux || Platform.isWindows)) {
@@ -12,42 +11,35 @@ void main() async {
   runApp(const MyApp());
 
   doWhenWindowReady(() {
-  const initialSize = Size(800, 600);
-  appWindow.minSize = initialSize;
-  appWindow.size = initialSize;
-  appWindow.alignment = Alignment.center;
-  appWindow.show();
-});
+    const initialSize = Size(800, 600);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      title: 'Welcome to Flutter',
-      debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-        primaryColor: Colors.black,
-
-
-      ),
-      home:  Scaffold(
-        extendBodyBehindAppBar: true,
-        body: WindowBorder(
-          width: 1,
-          color: const Color(0XFF805306),
-          // child: const GameScreen(),
-          child: const InitialScreen(),
-        )
-      )
-    );
+        title: 'Welcome to Flutter',
+        debugShowCheckedModeBanner: false,
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
+          scaffoldBackgroundColor: const Color(0xFF121212),
+          primaryColor: Colors.black,
+        ),
+        home: Scaffold(
+            extendBodyBehindAppBar: true,
+            body: WindowBorder(
+              width: 1,
+              color: const Color(0XFF805306),
+              // child: const GameScreen(),
+              child: const InitialScreen(),
+            )));
   }
 }
-

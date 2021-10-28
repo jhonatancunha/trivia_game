@@ -1,35 +1,32 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:trivia/entities/player.dart';
 
-class WebSocket{
+class WebSocket {
   static final WebSocket _singleton = WebSocket._internal();
   late final IO.Socket socket;
   bool isSocketOn = false;
 
-  void joinRoom(nickname){
+  void joinRoom(nickname) {
     Player player = Player(nickname, "0");
     socket.emit('join', player.toJson());
   }
 
-
-  void init(nickname){
-    socket = IO.io('http://127.0.0.1:8000',
+  void init(nickname) {
+    socket = IO.io(
+        'http://127.0.0.1:8000',
         IO.OptionBuilder()
-        .setTransports(['websocket']) //for Flutter or Dart VM
-        .disableAutoConnect() 
-        .build()
-      );
-      
+            .setTransports(['websocket']) //for Flutter or Dart VM
+            .disableAutoConnect()
+            .build());
 
-      socket.connect();
-      socket.onConnect((_) {
-        isSocketOn = true;
-        joinRoom(nickname);
-      });
+    socket.connect();
+    socket.onConnect((_) {
+      isSocketOn = true;
+      joinRoom(nickname);
+    });
   }
 
-
-  void sendMessage(message){
+  void sendMessage(message) {
     socket.emit('sendChatMessage', message);
   }
 
@@ -37,8 +34,8 @@ class WebSocket{
     return socket;
   }
 
-  void disconnect(){
-    if(isSocketOn){
+  void disconnect() {
+    if (isSocketOn) {
       socket.emit('left');
     }
   }
@@ -46,8 +43,6 @@ class WebSocket{
   factory WebSocket() {
     return _singleton;
   }
-
-  
 
   WebSocket._internal();
 }
