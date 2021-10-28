@@ -36,10 +36,12 @@ class _InitialScreenState extends State<InitialScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Image(image: AssetImage('assets/logo.png')),
-            ),
+            const Flexible( 
+              child: Padding(
+                padding: EdgeInsets.all(40),
+                child: Image(
+              image: AssetImage('assets/logo.png'),
+            ))),
             SizedBox(
               height: 50,
               width: 500,
