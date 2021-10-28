@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia/service/controller_chat.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
@@ -27,7 +28,7 @@ class _BottomBartState extends State<BottomBart> {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
       decoration:  BoxDecoration(
             color: HexColor("#1F1D2B"),
             border: Border(
@@ -48,6 +49,10 @@ class _BottomBartState extends State<BottomBart> {
           decoration:  InputDecoration(
             filled: true,
             fillColor: HexColor('#2E303F'),
+            focusedBorder:  OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderSide: BorderSide(color: HexColor("#6B5FCD"),  width: 2)
+            ),
             enabledBorder:  OutlineInputBorder(
               borderSide: BorderSide(
                 color: HexColor('#2E303F'), 
@@ -74,7 +79,8 @@ class _BottomBartState extends State<BottomBart> {
           height: 50,
           child: TextButton(
             onPressed:() {
-            widget.sendMessage(stateMessage);
+              widget.sendMessage(stateMessage);
+              ChatController.scrollDown();
             } ,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(HexColor("#6B5FCD")),

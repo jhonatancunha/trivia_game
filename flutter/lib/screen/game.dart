@@ -21,7 +21,6 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
 
-
   @override
   void initState() {
     super.initState();
@@ -53,6 +52,19 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
 
       setState((){
         _players.add(newPlayer);
+      });
+    });
+
+    websocket.socket.on('personLeaveTheGame', (msg){
+      print("saiu $msg");
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+
+      setState((){
+        _messages.add(objMessage);
       });
     });
 

@@ -40,7 +40,7 @@ def send_chat_message_handler(sid, environ):
   message = environ
   session = sio.get_session(sid)
   nickname = session['nickname']
-  sio.emit('messageChat', '{"message": ": %s", "nickname": "%s", "type":"chat"}' % (message, nickname), room=ROOM)
+  sio.emit('messageChat', '{"message": "%s", "nickname": "%s", "type":"chat"}' % (message, nickname), room=ROOM)
 
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
