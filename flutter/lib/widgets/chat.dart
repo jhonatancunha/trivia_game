@@ -14,9 +14,9 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // debugPrint(players.length);
-    return Expanded(
+    return Flexible(
       child: Container(
-        height: 200,
+        // height: 200,
         decoration:  BoxDecoration(
             color: HexColor("#1F1D2B"),
         ),

@@ -80,7 +80,7 @@ class _BottomBartState extends State<BottomBart> {
           child: TextButton(
             onPressed:() {
               widget.sendMessage(stateMessage);
-              ChatController.scrollDown();
+              // ChatController.scrollDown();
             } ,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(HexColor("#6B5FCD")),

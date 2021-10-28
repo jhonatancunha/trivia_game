@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trivia/service/web_socket.dart';
 import 'package:trivia/widgets/widgets.dart';
+import 'package:trivia/service/controller_chat.dart';
 
 // Models
 import 'dart:convert';
@@ -42,6 +43,7 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       setState((){
         _messages.add(objMessage);
       });
+      ChatController.scrollDown();
     });
 
     websocket.socket.on('newPlayer', (player){
@@ -53,6 +55,7 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       setState((){
         _players.add(newPlayer);
       });
+      ChatController.scrollDown();
     });
 
     websocket.socket.on('personLeaveTheGame', (msg){
@@ -66,6 +69,7 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       setState((){
         _messages.add(objMessage);
       });
+      ChatController.scrollDown();
     });
 
 
@@ -79,6 +83,7 @@ class _GameScreenState extends State<GameScreen>  with WidgetsBindingObserver{
       setState((){
         _messages.add(objMessage);
       });
+      ChatController.scrollDown();
     });
   }
 

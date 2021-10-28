@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class ChatController{
@@ -9,11 +11,13 @@ class ChatController{
   }
 
   static void scrollDown(){
-    _controllerChat.animateTo(
-      _controllerChat.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    Timer(const Duration(milliseconds: 100), () {
+      _controllerChat.jumpTo(
+          _controllerChat.position.maxScrollExtent,
+          // duration: const Duration(milliseconds: 100),
+          // curve: Curves.easeOut,
+      );      
+    });
   }
 
   factory ChatController() {

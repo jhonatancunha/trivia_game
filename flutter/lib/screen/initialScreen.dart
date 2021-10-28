@@ -70,12 +70,14 @@ class _InitialScreenState extends State<InitialScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  GameScreen(nickname: _nickname)),
-                      );
-                    }
+                    showAlertDialog(context);
+
+                    // if (_formKey.currentState!.validate()) {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) =>  GameScreen(nickname: _nickname)),
+                    //   );
+                    // }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: HexColor("#6B5FCD"),
