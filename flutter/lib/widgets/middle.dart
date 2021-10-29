@@ -19,7 +19,7 @@ class Middle extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const WindowTitleBar(),
-                const GameBoard(),
+                GameBoard(),
                 Chat(messages: messages),
               ],
             )));
