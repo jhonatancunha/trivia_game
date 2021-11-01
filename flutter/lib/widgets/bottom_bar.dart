@@ -70,6 +70,10 @@ class _BottomBartState extends State<BottomBart> {
                     child: TextButton(
                       onPressed: () {
                         widget.sendMessage(stateMessage);
+                        chatMessage.clear();
+                        setState(() {
+                          stateMessage = '';
+                        });
                       },
                       style: ButtonStyle(
                         backgroundColor:

@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 //  teste.split('').map((element) => Text(element)).toList(),
 class GameBoard extends StatelessWidget {
   GameBoard({Key? key}) : super(key: key);
-  String teste = "Sá*ado *e So*";
+  String teste = "O *essé é um *tario";
 
   renderLetter(letter) {
     var caracter = letter;
@@ -41,7 +41,7 @@ class GameBoard extends StatelessWidget {
 
     var color = HexColor('#877CE8');
     if (letter == '*') {
-      color = HexColor('#4F5164');
+      color = HexColor('#393B4B');
     }
 
     // return HexColor('#877CE8');
@@ -50,7 +50,7 @@ class GameBoard extends StatelessWidget {
       color: color,
       spreadRadius: 1,
       blurRadius: 0,
-      offset: const Offset(1, 1.5), // changes position of shadow
+      offset: const Offset(1, 2), // changes position of shadow
     );
   }
 
@@ -64,13 +64,38 @@ class GameBoard extends StatelessWidget {
                 bottom: BorderSide(width: 2, color: HexColor('#393B4B')),
               ),
             ),
-            height: 250,
+            height: 300,
             width: double.infinity,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("TEXTO DE ${teste.length} LETRAS"),
+                  Tooltip(
+                      message: 'TEMA DA RODADA',
+                      child: Container(
+                          padding: const EdgeInsets.all(8),
+                          width: MediaQuery.of(context).size.width / 2,
+                          decoration: BoxDecoration(
+                            color: HexColor('#393B4B'),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Row(children: [
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Icon(
+                                  Icons.assistant_photo_rounded,
+                                  color: HexColor('#6B5FCD'),
+                                  size: 24.0,
+                                  semanticLabel: 'Tema da Rodada',
+                                )),
+                            const Expanded(
+                                child: Text("Tema aqui",
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)))
+                          ]))),
+                  // Text("TEXTO DE ${teste.length} LETRAS"),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,26 +122,32 @@ class GameBoard extends StatelessWidget {
                               .toList(),
                         ))
                       ]),
-                  Column(children: [
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Text("TEMA: "),
-                              Text("tema aqui")
-                            ])),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 4, 0, 20),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Text("DICA: "),
-                              Text("dica aqui")
-                            ]))
-                  ])
+                  Tooltip(
+                      message: 'DICA DA RODADA',
+                      child: Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                          width: MediaQuery.of(context).size.width / 2,
+                          decoration: BoxDecoration(
+                            color: HexColor('#393B4B'),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          child: Row(children: [
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Icon(
+                                  Icons.album_sharp,
+                                  color: HexColor('#6B5FCD'),
+                                  size: 24.0,
+                                  semanticLabel: 'Dica da Rodada',
+                                )),
+                            const Expanded(
+                                child: Text("Dica aqui",
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)))
+                          ]))),
                 ])));
   }
 }

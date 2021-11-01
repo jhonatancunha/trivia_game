@@ -177,9 +177,24 @@ class _InitialScreenState extends State<InitialScreen> {
                         height: 50,
                         width: 500,
                         child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: HexColor('#2E303F'),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: HexColor('#2E303F'), width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5)),
+                                borderSide: BorderSide(
+                                    color: HexColor("#6B5FCD"), width: 2)),
                             labelText: 'Digite seu nickname',
+                            labelStyle: const TextStyle(
+                              color: Colors.white,
+                              fontStyle: FontStyle.normal,
+                            ),
+                            border: const OutlineInputBorder(),
                           ),
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {

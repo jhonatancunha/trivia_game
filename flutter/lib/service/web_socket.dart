@@ -27,7 +27,9 @@ class WebSocket {
   }
 
   void sendMessage(message) {
-    socket.emit('sendChatMessage', message);
+    if (message.length > 0) {
+      socket.emit('sendChatMessage', message);
+    }
   }
 
   IO.Socket getSocket() {

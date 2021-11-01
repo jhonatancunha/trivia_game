@@ -23,15 +23,31 @@ class SideBar extends StatelessWidget {
             ),
             // color: HexColor("#1F1D2B"),
             child: Column(children: [
-              WindowTitleBarBox(child: MoveWindow()),
+              WindowTitleBarBox(
+                  child: MoveWindow(
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                    child: Text('JOGADORES',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: HexColor("#6B5FCD")))),
+              )),
+              Divider(
+                color: HexColor('#393B4B'),
+                height: 30,
+                thickness: 2,
+                indent: 0,
+                endIndent: 0,
+              ),
               ListView.builder(
                   shrinkWrap: true,
                   itemCount: players.length,
                   itemBuilder: (BuildContext contex, int index) {
-                    return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(children: [
-                          Row(children: [
+                    return Column(children: [
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Row(children: [
                             CircleAvatar(
                               backgroundColor: HexColor("#6B5FCD"),
                               child: Text(
@@ -65,15 +81,15 @@ class SideBar extends StatelessWidget {
                                                     color: Colors.white))
                                           ])
                                         ])))
-                          ]),
-                          Divider(
-                            color: HexColor('#393B4B'),
-                            height: 30,
-                            thickness: 2,
-                            indent: 0,
-                            endIndent: 0,
-                          ),
-                        ]));
+                          ])),
+                      Divider(
+                        color: HexColor('#393B4B'),
+                        height: 30,
+                        thickness: 2,
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                    ]);
                   })
             ])));
   }
