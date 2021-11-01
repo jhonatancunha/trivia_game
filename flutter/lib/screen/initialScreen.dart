@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trivia/widgets/widgets.dart';
-import 'package:trivia/screen/game.dart';
 import 'package:hexcolor/hexcolor.dart';
+
+import 'package:trivia/screen/game.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
