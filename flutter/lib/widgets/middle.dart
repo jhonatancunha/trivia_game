@@ -19,6 +19,8 @@ class Middle extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const WindowTitleBar(),
+                // const TimerToStart(),
+                // const WaitMainPlayer(),
                 GameBoard(),
                 Chat(messages: messages),
               ],
