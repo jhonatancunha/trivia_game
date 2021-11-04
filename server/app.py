@@ -1,38 +1,41 @@
-import socketio
-
+import jsons
+from entities.server import Server
+from entities.room import Room
+from entities.player import Player
 
 #ENTITES
 # create a Socket.IO server
-sio = socketio.Server(async_mode='gevent', logger=True, engineio_logger=True)
-ROOM = '123'
+server = Server()
+sio = server.get_sio()
+room = Room('123')
 
-
-# @sio.event
-# def connect(sid, environ, auth):
-#     # print('connect ', sid, environ, auth)
-#     pass
-
-# @sio.event
-# def disconnect(sid):
-#     print('disconnect ', sid)
     
-
+# Adicionar jogador no quarto
 @sio.on('join') 
 def join(sid, environ):
   nickname = environ.get('nickname')
   score = environ.get('score')
-  sio.save_session(sid, {'nickname': nickname, 'score': score, 'room': ROOM})
-  sio.enter_room(sid, '123')
-  sio.emit('newPlayer', '{"nickname": "%s", "score": "%s"}' % (nickname, score), to=ROOM)
-  sio.emit('messageJoin', '{"message": " entrou na sala.", "nickname": "%s", "type":"join"}' % nickname, room=ROOM)
-  
+
+  # Adicionando player ao quarto
+  new_player = Player(sid, nickname, score, room.get_key())
+  room.set_player(new_player.get_sid(), new_player)
+  sio.enter_room(sid, room.get_key())
+
+  sio.save_session(sid, {'room': room.get_key()})
+  sio.emit('newPlayer', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
+  sio.emit('messageJoin', jsons.dumps({"message": " entrou na sala.", "nickname": nickname, "type":"join"}), room=room.get_key())
+
+
 @sio.on('left')
 def left(sid):
   session = sio.get_session(sid)
-  room = session['room']
+  room_key = session['room']
   nickname = session['nickname']
-  sio.leave_room(sid, room)
-  sio.emit('personLeaveTheGame', '{"message": " saiu da sala.", "nickname": "%s", "type":"leave"}' % nickname, room=room)
+  sio.leave_room(sid, room_key)
+
+  room.remove_player(sid)
+
+  sio.emit('personLeaveTheGame', jsons.dumps({"message": " saiu da sala.", "nickname": nickname, "type":"leave"}), room=room_key)
 
 
 @sio.on('sendChatMessage')
@@ -40,10 +43,7 @@ def send_chat_message_handler(sid, environ):
   message = environ
   session = sio.get_session(sid)
   nickname = session['nickname']
-  sio.emit('messageChat', '{"message": "%s", "nickname": "%s", "type":"chat"}' % (message, nickname), room=ROOM)
+  sio.emit('messageChat', jsons.dumps({"message": message, "nickname": nickname, "type":"chat"}), room=room.get_key())
 
-from gevent import pywsgi
-from geventwebsocket.handler import WebSocketHandler
-app = socketio.WSGIApp(sio)
-pywsgi.WSGIServer(('', 8000), app,
-                  handler_class=WebSocketHandler).serve_forever()
+
+app = server.start()
