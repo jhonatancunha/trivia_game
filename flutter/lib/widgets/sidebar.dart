@@ -40,57 +40,62 @@ class SideBar extends StatelessWidget {
                 indent: 0,
                 endIndent: 0,
               ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: players.length,
-                  itemBuilder: (BuildContext contex, int index) {
-                    return Column(children: [
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          child: Row(children: [
-                            CircleAvatar(
-                              backgroundColor: HexColor("#6B5FCD"),
-                              child: Text(
-                                  players[index].nickname[0].toUpperCase(),
-                                  style: const TextStyle(color: Colors.white)),
-                            ),
-                            Expanded(
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(players[index].nickname,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                          Row(children: [
-                                            const Text("Pontos: ",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Text(players[index].score,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color: Colors.white))
-                                          ])
-                                        ])))
-                          ])),
-                      Divider(
-                        color: HexColor('#393B4B'),
-                        height: 30,
-                        thickness: 2,
-                        indent: 0,
-                        endIndent: 0,
-                      ),
-                    ]);
-                  })
+              Flexible(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: players.length,
+                      itemBuilder: (BuildContext contex, int index) {
+                        return Column(children: [
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              child: Row(children: [
+                                CircleAvatar(
+                                  backgroundColor: HexColor("#6B5FCD"),
+                                  child: Text(
+                                      players[index].nickname[0].toUpperCase(),
+                                      style:
+                                          const TextStyle(color: Colors.white)),
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 0, 8, 0),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(players[index].nickname,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Row(children: [
+                                                const Text("Pontos: ",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                Text(players[index].score,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                        color: Colors.white))
+                                              ])
+                                            ])))
+                              ])),
+                          Divider(
+                            color: HexColor('#393B4B'),
+                            height: 30,
+                            thickness: 2,
+                            indent: 0,
+                            endIndent: 0,
+                          ),
+                        ]);
+                      }))
             ])));
   }
 }

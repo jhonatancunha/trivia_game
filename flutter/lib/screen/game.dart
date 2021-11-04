@@ -44,15 +44,20 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('newPlayer', (player) {
-      print(player);
-      var score = json.decode(player.toString())['score'];
-      var nickname = json.decode(player.toString())['nickname'];
-      Player newPlayer = Player(nickname, score);
+    websocket.socket.on('newPlayer', (players) {
+      Map<String, dynamic> playersList =
+          Map<String, dynamic>.from(json.decode(players)['players']);
 
-      setState(() {
-        _players.add(newPlayer);
-      });
+      _players.clear();
+      for (var player in playersList.values) {
+        var nickname = player['nickname'];
+        var score = player['score'];
+        Player newPlayer = Player(nickname, score);
+        setState(() {
+          _players.add(newPlayer);
+        });
+      }
+
       ChatController.scrollDown();
     });
 
