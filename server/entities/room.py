@@ -1,9 +1,12 @@
 from collections import defaultdict
 
+# ENTITIES
+from entities.player import Player
+
 class Room():
   def __init__(self, key):
     self.key = key
-    self.players = defaultdict(dict)
+    self.players = defaultdict(Player)
   
   
   def set_key(self, key):

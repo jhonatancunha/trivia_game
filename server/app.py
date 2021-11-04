@@ -3,11 +3,14 @@ from entities.server import Server
 from entities.room import Room
 from entities.player import Player
 
+# CONSTS
+ROOM_KEY = '123'
+
 #ENTITES
 # create a Socket.IO server
 server = Server()
 sio = server.get_sio()
-room = Room('123')
+server.set_room('123')
 
     
 # Adicionar jogador no quarto
@@ -15,6 +18,7 @@ room = Room('123')
 def join(sid, environ):
   nickname = environ.get('nickname')
   score = environ.get('score')
+  room = server.get_room(ROOM_KEY)
 
   # Adicionando player ao quarto
   new_player = Player(sid, nickname, score, room.get_key())
@@ -22,7 +26,7 @@ def join(sid, environ):
   sio.enter_room(sid, room.get_key())
 
   sio.save_session(sid, {'room': room.get_key()})
-  sio.emit('newPlayer', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
+  sio.emit('listOfPlayers', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
   sio.emit('messageJoin', jsons.dumps({"message": " entrou na sala.", "nickname": nickname, "type":"join"}), room=room.get_key())
 
 
@@ -30,20 +34,26 @@ def join(sid, environ):
 def left(sid):
   session = sio.get_session(sid)
   room_key = session['room']
-  nickname = session['nickname']
-  sio.leave_room(sid, room_key)
+  room = server.get_room(room_key)
+  player = room.get_player(sid)
 
+  # Removendo player da sala
+  sio.leave_room(sid, room_key)
   room.remove_player(sid)
 
-  sio.emit('personLeaveTheGame', jsons.dumps({"message": " saiu da sala.", "nickname": nickname, "type":"leave"}), room=room_key)
+  sio.emit('listOfPlayers', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
+  sio.emit('playerLeaveTheGame', jsons.dumps({"message": " saiu da sala.", "nickname": player.get_nickname(), "type":"leave"}), room=room_key)
 
 
 @sio.on('sendChatMessage')
 def send_chat_message_handler(sid, environ):
   message = environ
   session = sio.get_session(sid)
-  nickname = session['nickname']
-  sio.emit('messageChat', jsons.dumps({"message": message, "nickname": nickname, "type":"chat"}), room=room.get_key())
+  room_key = session['room']
+  room = server.get_room(room_key)
+  player = room.get_player(sid)
+
+  sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=room.get_key())
 
 
 app = server.start()

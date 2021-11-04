@@ -1,13 +1,14 @@
 import socketio
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
-from typing import DefaultDict
+from collections import defaultdict
+from entities.room import Room
 
 class Server():
   
   def __init__(self):
     self.sio = socketio.Server(async_mode='gevent', logger=True, engineio_logger=True)
-    self.rooms = DefaultDict(dict)
+    self.rooms = defaultdict(Room)
 
   def get_sio(self):
     return self.sio
@@ -18,8 +19,9 @@ class Server():
   def get_all_rooms(self):
     return self.rooms
 
-  def set_room(self, room):
-    self.rooms[room.key] = room
+  def set_room(self, key):
+    room = Room(key)
+    self.rooms[key] = room
 
   def remove_room(self, key):
     self.rooms.pop(key)
