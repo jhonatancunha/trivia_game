@@ -44,7 +44,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('newPlayer', (players) {
+    websocket.socket.on('listOfPlayers', (players) {
       Map<String, dynamic> playersList =
           Map<String, dynamic>.from(json.decode(players)['players']);
 
@@ -61,7 +61,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('personLeaveTheGame', (msg) {
+    websocket.socket.on('playerLeaveTheGame', (msg) {
       print("saiu $msg");
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
