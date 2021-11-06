@@ -6,7 +6,9 @@ import 'package:hexcolor/hexcolor.dart';
 
 class Middle extends StatelessWidget {
   final List<Message> messages;
-  const Middle({Key? key, required this.messages}) : super(key: key);
+  final int timer;
+  const Middle({Key? key, required this.messages, required this.timer})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,8 @@ class Middle extends StatelessWidget {
                 const WindowTitleBar(),
                 // const TimerToStart(),
                 // const WaitMainPlayer(),
-                GameBoard(),
+                Text(timer.toString()),
+                // GameBoard(),
                 Chat(messages: messages),
               ],
             )));

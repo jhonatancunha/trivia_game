@@ -2,6 +2,8 @@ import jsons
 from entities.server import Server
 from entities.room import Room
 from entities.player import Player
+from entities.countdown import CountDown
+
 
 # CONSTS
 ROOM_KEY = '123'
@@ -26,8 +28,17 @@ def join(sid, environ):
   sio.enter_room(sid, room.get_key())
 
   sio.save_session(sid, {'room': room.get_key()})
+  
+  
   sio.emit('listOfPlayers', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
   sio.emit('messageJoin', jsons.dumps({"message": " entrou na sala.", "nickname": nickname, "type":"join"}), room=room.get_key())
+  
+  cd = CountDown(30, sio, 'teste', ROOM_KEY)
+  cd.start()
+   
+  
+  # teste_timer(sio, room.get_key())
+
 
 
 @sio.on('left')

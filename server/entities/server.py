@@ -3,7 +3,6 @@ from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 from collections import defaultdict
 from entities.room import Room
-
 class Server():
   
   def __init__(self):

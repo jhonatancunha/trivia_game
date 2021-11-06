@@ -20,6 +20,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final List<Player> _players = <Player>[];
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
+  int timer = 0;
 
   @override
   void initState() {
@@ -42,6 +43,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         _messages.add(objMessage);
       });
       ChatController.scrollDown();
+    });
+
+    websocket.socket.on('teste', (data) {
+      print("recebeu timer $data");
+      setState(() {
+        timer = data;
+      });
     });
 
     websocket.socket.on('listOfPlayers', (players) {
@@ -110,7 +118,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
             child: Row(
           children: [
             SideBar(players: _players),
-            Middle(messages: _messages),
+            Middle(messages: _messages, timer: timer),
           ],
         )),
         // BOTTOM SIDE
