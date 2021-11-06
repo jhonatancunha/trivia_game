@@ -29,12 +29,14 @@ def join(sid, environ):
 
   sio.save_session(sid, {'room': room.get_key()})
   
+  cd = CountDown(30, sio, 'teste', ROOM_KEY)
+  thread = sio.start_background_task(target=cd.start)
+  
+  print(thread)
   
   sio.emit('listOfPlayers', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
   sio.emit('messageJoin', jsons.dumps({"message": " entrou na sala.", "nickname": nickname, "type":"join"}), room=room.get_key())
   
-  cd = CountDown(30, sio, 'teste', ROOM_KEY)
-  cd.start()
    
   
   # teste_timer(sio, room.get_key())
