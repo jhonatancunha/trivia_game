@@ -24,10 +24,15 @@ class WaitMainPlayer extends StatelessWidget {
                     child: Text("Aguardando jogadores...",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16))),
-                CircularProgressIndicator(
-                  color: HexColor('#6B5FCD'),
-                  semanticsLabel: 'Aguardando mais jogadores...',
-                ),
+                SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 15,
+                      color: HexColor('#6B5FCD'),
+                      backgroundColor: HexColor('#2E303F'),
+                      semanticsLabel: 'Aguardando mais jogadores...',
+                    )),
               ],
             )));
   }
