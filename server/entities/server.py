@@ -19,7 +19,7 @@ class Server():
     return self.rooms
 
   def set_room(self, key):
-    room = Room(key)
+    room = Room(key, self.sio)
     self.rooms[key] = room
 
   def remove_room(self, key):
