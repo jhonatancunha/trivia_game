@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class TimerToStart extends StatelessWidget {
+class WaitingMainPlayer extends StatelessWidget {
   final String seconds;
 
-  const TimerToStart({Key? key, required this.seconds}) : super(key: key);
+  const WaitingMainPlayer({Key? key, required this.seconds}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class TimerToStart extends StatelessWidget {
               children: [
                 const Padding(
                     padding: EdgeInsets.all(20),
-                    child: Text("A partida começará em breve!",
+                    child: Text(
+                        "Aguardando jogador da vez informar os dados da rodada!",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16))),
                 SizedBox(
