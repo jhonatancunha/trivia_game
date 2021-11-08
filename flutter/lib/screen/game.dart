@@ -45,7 +45,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       ChatController.scrollDown();
     });
 
-    websocket.socket.on('teste', (data) {
+    websocket.socket.on('timer', (data) {
       print("recebeu timer $data");
       setState(() {
         timer = data;

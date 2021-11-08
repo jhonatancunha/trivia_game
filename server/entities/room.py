@@ -9,11 +9,17 @@ class Room():
     self.key = key
     self.players = defaultdict(Player)
     self.sio = sio
+    self.countdown = CountDown(60, self.sio, 'timer', self.key)
 
-  def manage_timer(self):
-    cd = CountDown(30, self.sio, 'teste', self.key)
-    thread = self.sio.start_background_task(target=cd.start)
-    print(thread)
+
+  def start_timer(self):
+    # thread = 'this thread was stopped'
+
+    if self.countdown.get_started() == False:
+      self.countdown.set_started(True)
+      # thread = self.sio.start_background_task(target=self.countdown.start)
+      self.sio.start_background_task(target=self.countdown.start)
+    # print(thread)
 
   def set_key(self, key):
     self.key = key
@@ -22,7 +28,7 @@ class Room():
     self.players[sid] = player
 
     if len(self.players) >= 2:
-      self.manage_timer()
+      self.start_timer()
   
   def get_key(self):
     return self.key
@@ -40,4 +46,6 @@ class Room():
   def remove_player(self, sid):
     if sid in self.players:
       del self.players[sid]
-
+    
+    if len(self.players) < 2:
+      self.countdown.stop()
