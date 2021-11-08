@@ -49,3 +49,4 @@ class Room():
     
     if len(self.players) < 2:
       self.countdown.stop()
+      self.sio.emit('stopCountDown', room=self.key)

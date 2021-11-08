@@ -21,7 +21,7 @@ class WaitMainPlayer extends StatelessWidget {
               children: [
                 const Padding(
                     padding: EdgeInsets.all(20),
-                    child: Text("Aguardando jogador da vez...",
+                    child: Text("Aguardando jogadores...",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16))),
                 CircularProgressIndicator(

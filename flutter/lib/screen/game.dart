@@ -20,6 +20,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final List<Player> _players = <Player>[];
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
+  bool _waitingPlayers = true;
+
   int timer = 0;
 
   @override
@@ -49,6 +51,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       print("recebeu timer $data");
       setState(() {
         timer = data;
+        _waitingPlayers = false;
+      });
+    });
+
+    websocket.socket.on('stopCountDown', (_) {
+      setState(() {
+        _waitingPlayers = true;
       });
     });
 
@@ -118,7 +127,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
             child: Row(
           children: [
             SideBar(players: _players),
-            Middle(messages: _messages, timer: timer),
+            Middle(
+                messages: _messages,
+                timer: timer,
+                waitingPlayers: _waitingPlayers),
           ],
         )),
         // BOTTOM SIDE

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class TimerToStart extends StatelessWidget {
-  const TimerToStart({Key? key}) : super(key: key);
+  final String seconds;
+
+  const TimerToStart({Key? key, required this.seconds}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,11 @@ class TimerToStart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text("Timer aqui...",
-                        style: TextStyle(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(seconds,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16))),
               ],
             )));
