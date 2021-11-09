@@ -8,3 +8,4 @@ export 'window_buttons.dart';
 export 'waiting_player.dart';
 export 'timer_to_start.dart';
 export 'wait_main_player.dart';
+export 'information_of_round.dart';

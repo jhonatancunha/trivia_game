@@ -32,6 +32,12 @@ class WebSocket {
     }
   }
 
+  void sendInformationsOfRound(hint, theme, answer) {
+    print("Hint $hint");
+    print("Theme $theme");
+    print("Answer $answer");
+  }
+
   IO.Socket getSocket() {
     return socket;
   }

@@ -8,12 +8,16 @@ class Middle extends StatelessWidget {
   final List<Message> messages;
   final int timer;
   final bool waitingPlayers;
-  const Middle(
-      {Key? key,
-      required this.messages,
-      required this.timer,
-      required this.waitingPlayers})
-      : super(key: key);
+  final bool isMainPlayer;
+  final Function sendInformationsOfRound;
+  const Middle({
+    Key? key,
+    required this.messages,
+    required this.timer,
+    required this.waitingPlayers,
+    required this.isMainPlayer,
+    required this.sendInformationsOfRound,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,9 @@ class Middle extends StatelessWidget {
                 // const WaitingMainPlayer(seconds: '60'),
                 if (waitingPlayers)
                   const WaitMainPlayer()
+                else if (isMainPlayer)
+                  InformationOfRound(
+                      sendInformationsOfRound: sendInformationsOfRound)
                 else
                   TimerToStart(seconds: timer.toString()),
                 // const TimerToStart(),

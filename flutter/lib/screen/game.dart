@@ -20,9 +20,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final List<Player> _players = <Player>[];
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
-  bool _waitingPlayers = true;
 
   int timer = 0;
+
+  bool _waitingPlayers = false;
+  bool _isMainPlayer = true;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     websocket.init(widget.nickname);
 
     websocket.socket.on('messageJoin', (msg) {
-      print("entro $msg");
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];
@@ -48,7 +49,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('timer', (data) {
-      print("recebeu timer $data");
       setState(() {
         timer = data;
         _waitingPlayers = false;
@@ -79,7 +79,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('playerLeaveTheGame', (msg) {
-      print("saiu $msg");
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];
@@ -92,7 +91,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('messageChat', (msg) {
-      print(msg);
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];
@@ -103,13 +101,18 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       });
       ChatController.scrollDown();
     });
+
+    websocket.socket.on('currentRoundPlayer', (_) {
+      setState(() {
+        _isMainPlayer = true;
+      });
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
-    print("fechando");
   }
 
   @override
@@ -128,9 +131,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           children: [
             SideBar(players: _players),
             Middle(
-                messages: _messages,
-                timer: timer,
-                waitingPlayers: _waitingPlayers),
+              messages: _messages,
+              timer: timer,
+              waitingPlayers: _waitingPlayers,
+              isMainPlayer: _isMainPlayer,
+              sendInformationsOfRound: websocket.sendInformationsOfRound,
+            ),
           ],
         )),
         // BOTTOM SIDE
