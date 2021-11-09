@@ -35,6 +35,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   late String _waitingMainPlayerMessage;
 
   //ROUND
+  int _roundTimer = 0;
+  int _totalRoundTimer = 0;
   String _theme = '';
   String _answer = '';
   String _hint = '';
@@ -180,6 +182,16 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         _nAmount = nAmount;
       });
     });
+
+    websocket.socket.on('roundTimer', (data) {
+      var totalTimeAux = json.decode(data.toString())['total_time'];
+      var timerAux = json.decode(data.toString())['time'];
+
+      setState(() {
+        _roundTimer = timerAux;
+        _totalRoundTimer = totalTimeAux;
+      });
+    });
   }
 
   @override
@@ -219,7 +231,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 hint: _hint,
                 currentRound: _currentRound,
                 nAmount: _nAmount,
-                isGameStarted: _isGameStarted),
+                isGameStarted: _isGameStarted,
+                roundTimer: _roundTimer,
+                totalRoundTimer: _totalRoundTimer),
           ],
         )),
         // BOTTOM SIDE

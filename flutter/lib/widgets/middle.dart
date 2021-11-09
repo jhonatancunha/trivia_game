@@ -10,6 +10,9 @@ class Middle extends StatelessWidget {
   final int timer;
   final int timerWaitWord;
   final int totalTimerWaitWord;
+  final int roundTimer;
+  final int totalRoundTimer;
+
   final bool waitingPlayers;
   final bool isMainPlayer;
   final Function sendInformationsOfRound;
@@ -36,6 +39,8 @@ class Middle extends StatelessWidget {
     required this.timerWaitWord,
     required this.totalTimer,
     required this.totalTimerWaitWord,
+    required this.roundTimer,
+    required this.totalRoundTimer,
     required this.theme,
     required this.answer,
     required this.hint,
@@ -70,12 +75,13 @@ class Middle extends StatelessWidget {
                       waitingMainPlayerMessage: waitingMainPlayerMessage)
                 else if (isGameStarted)
                   GameBoard(
-                    theme: theme,
-                    answer: answer,
-                    hint: hint,
-                    currentRound: currentRound,
-                    nAmount: nAmount,
-                  )
+                      theme: theme,
+                      answer: answer,
+                      hint: hint,
+                      currentRound: currentRound,
+                      nAmount: nAmount,
+                      roundTimer: roundTimer,
+                      totalRoundTimer: totalRoundTimer)
                 else
                   TimerToStart(
                       seconds: timer.toString(), totalTimer: totalTimer),

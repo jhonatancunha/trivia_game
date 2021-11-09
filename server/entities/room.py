@@ -21,7 +21,7 @@ class Room():
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
     self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
-    self.round_timer = CountDown(60, self.sio, 'round', self.key, self.round_player)
+    self.round_timer = CountDown(60, self.sio, 'roundTimer', self.key, self.round_player)
 
 
   def start_timer(self):
