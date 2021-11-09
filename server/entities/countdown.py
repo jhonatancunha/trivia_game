@@ -1,17 +1,21 @@
 class CountDown():
   
-  def __init__(self, time, sio, event, room):
+  def __init__(self, time, sio, event, room, callback):
     self.started = False
     self.event = event
     self.counter = time
     self.room = room
     self.sio = sio
+    self.callback = callback
     
   def start(self):
     while self.counter >= 0 and self.started == True:
       self.sio.emit(self.event, self.counter, to=self.room)
       self.counter -= 1
       self.sio.sleep(1)
+    
+    if self.counter == 0:
+      self.callback()
 
   def stop(self):
     self.started = False

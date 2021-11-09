@@ -1,4 +1,5 @@
 from collections import defaultdict
+import jsons
 
 # ENTITIES
 from entities.player import Player
@@ -8,24 +9,28 @@ class Room():
   def __init__(self, key, sio):
     self.key = key
     self.players = defaultdict(Player)
+    self.sid_list = []
+    self.round = 0
+    self.rounds_quantity = 1
+    self.is_round_started = False
     self.sio = sio
-    self.countdown = CountDown(60, self.sio, 'timer', self.key)
+    self.countdown = CountDown(60, self.sio, 'timer', self.key, self.round_player)
 
 
   def start_timer(self):
-    # thread = 'this thread was stopped'
-
     if self.countdown.get_started() == False:
       self.countdown.set_started(True)
-      # thread = self.sio.start_background_task(target=self.countdown.start)
       self.sio.start_background_task(target=self.countdown.start)
-    # print(thread)
 
   def set_key(self, key):
     self.key = key
   
   def set_player(self, sid, player):
     self.players[sid] = player
+    self.sid_list.append(sid)
+
+    if not self.is_round_started:
+      self.rounds_quantity *= 2
 
     if len(self.players) >= 2:
       self.start_timer()
@@ -46,7 +51,30 @@ class Room():
   def remove_player(self, sid):
     if sid in self.players:
       del self.players[sid]
-    
+      del(self.sid_list[self.sid_list.index(sid)])
+
     if len(self.players) < 2:
       self.countdown.stop()
       self.sio.emit('stopCountDown', room=self.key)
+
+    if not self.is_round_started:
+      self.rounds_quantity /= 2
+
+  def get_round_player(self):
+    if self.round != None:
+      sid = self.sid_list[self.round % len(self.sid_list)]
+      return self.players[sid]
+
+  def round_player(self):
+    player = self.get_round_player()
+
+    self.sio.emit('currentRoundPlayer', to=player.get_sid())
+    self.sio.emit(
+      'roundPlayer',
+      jsons.dumps({"message": " é o jogador da vez", "nickname": player.get_nickname()}),
+      room=self.key,
+      skip_sid=player.get_sid()
+    )
+
+    if self.round < self.rounds_quantity:
+      self.round += 1
