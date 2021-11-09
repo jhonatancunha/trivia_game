@@ -26,11 +26,11 @@ class Middle extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const WindowTitleBar(),
-                const WaitingMainPlayer(seconds: '60'),
-                // if (waitingPlayers)
-                //   const WaitMainPlayer()
-                // else
-                //   TimerToStart(seconds: timer.toString()),
+                // const WaitingMainPlayer(seconds: '60'),
+                if (waitingPlayers)
+                  const WaitMainPlayer()
+                else
+                  TimerToStart(seconds: timer.toString()),
                 // const TimerToStart(),
                 // GameBoard(),
                 Chat(messages: messages),
