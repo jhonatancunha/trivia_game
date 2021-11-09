@@ -192,6 +192,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         _totalRoundTimer = totalTimeAux;
       });
     });
+
+    websocket.socket.on('revealLetter', (data) {
+      var answerMask = json.decode(data.toString())['answer_mask'];
+
+      setState(() => {_answer = answerMask});
+    });
   }
 
   @override
