@@ -26,10 +26,20 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   int _totalTimerWaitWord = 0;
   int _timerWaitWord = 0;
 
+  //Controllers
   bool _waitingPlayers = true;
   bool _isMainPlayer = false;
   bool _isWaitingMainPlayer = false;
+  bool _isGameStarted = false;
+
   late String _waitingMainPlayerMessage;
+
+  //ROUND
+  String _theme = '';
+  String _answer = '';
+  String _hint = '';
+  int _currentRound = 0;
+  int _nAmount = 0;
 
   @override
   void initState() {
@@ -64,6 +74,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         timer = timerAux;
         totalTimer = totalTimeAux;
         _waitingPlayers = false;
+        _isGameStarted = false;
+        _isWaitingMainPlayer = false;
+        _isMainPlayer = false;
       });
     });
 
@@ -79,6 +92,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
     websocket.socket.on('stopCountDown', (_) {
       setState(() {
+        _isGameStarted = false;
+        _isWaitingMainPlayer = false;
+        _isMainPlayer = false;
         _waitingPlayers = true;
       });
     });
@@ -126,6 +142,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
     websocket.socket.on('currentRoundPlayer', (_) {
       setState(() {
+        _waitingPlayers = false;
+        _isGameStarted = false;
         _isMainPlayer = true;
         _isWaitingMainPlayer = false;
       });
@@ -135,9 +153,31 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var message = json.decode(msg.toString())['message'];
 
       setState(() {
+        _waitingPlayers = false;
+        _isGameStarted = false;
         _isMainPlayer = false;
         _isWaitingMainPlayer = true;
         _waitingMainPlayerMessage = message;
+      });
+    });
+
+    websocket.socket.on('startRound', (data) {
+      var theme = json.decode(data.toString())['theme'];
+      var answer = json.decode(data.toString())['answer'];
+      var hint = json.decode(data.toString())['hint'];
+      var currentRound = json.decode(data.toString())['current_round'];
+      var nAmount = json.decode(data.toString())['n_amount'];
+
+      setState(() {
+        _isGameStarted = true;
+        _isMainPlayer = false;
+        _waitingPlayers = false;
+        _isWaitingMainPlayer = false;
+        _theme = theme;
+        _answer = answer;
+        _hint = hint;
+        _currentRound = currentRound;
+        _nAmount = nAmount;
       });
     });
   }
@@ -164,17 +204,22 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           children: [
             SideBar(players: _players),
             Middle(
-              messages: _messages,
-              timer: timer,
-              totalTimer: totalTimer,
-              waitingPlayers: _waitingPlayers,
-              isMainPlayer: _isMainPlayer,
-              sendInformationsOfRound: websocket.sendInformationsOfRound,
-              isWaitingMainPlayer: _isWaitingMainPlayer,
-              waitingMainPlayerMessage: _waitingMainPlayerMessage,
-              timerWaitWord: _timerWaitWord,
-              totalTimerWaitWord: _totalTimerWaitWord,
-            ),
+                messages: _messages,
+                timer: timer,
+                totalTimer: totalTimer,
+                waitingPlayers: _waitingPlayers,
+                isMainPlayer: _isMainPlayer,
+                sendInformationsOfRound: websocket.sendInformationsOfRound,
+                isWaitingMainPlayer: _isWaitingMainPlayer,
+                waitingMainPlayerMessage: _waitingMainPlayerMessage,
+                timerWaitWord: _timerWaitWord,
+                totalTimerWaitWord: _totalTimerWaitWord,
+                theme: _theme,
+                answer: _answer,
+                hint: _hint,
+                currentRound: _currentRound,
+                nAmount: _nAmount,
+                isGameStarted: _isGameStarted),
           ],
         )),
         // BOTTOM SIDE

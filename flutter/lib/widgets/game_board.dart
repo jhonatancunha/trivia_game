@@ -4,8 +4,20 @@ import 'package:hexcolor/hexcolor.dart';
 
 //  teste.split('').map((element) => Text(element)).toList(),
 class GameBoard extends StatelessWidget {
-  GameBoard({Key? key}) : super(key: key);
-  String teste = "O *essé é um *tario";
+  final String theme;
+  final String answer;
+  final String hint;
+  final int currentRound;
+  final int nAmount;
+
+  const GameBoard({
+    Key? key,
+    required this.theme,
+    required this.answer,
+    required this.hint,
+    required this.currentRound,
+    required this.nAmount,
+  }) : super(key: key);
 
   renderLetter(letter) {
     var caracter = letter;
@@ -86,11 +98,11 @@ class GameBoard extends StatelessWidget {
                                   size: 24.0,
                                   semanticLabel: 'Tema da Rodada',
                                 )),
-                            const Expanded(
-                                child: Text("Tema aqui",
+                            Expanded(
+                                child: Text(theme,
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)))
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)))
                           ]))),
                   // Text("TEXTO DE ${teste.length} LETRAS"),
                   Row(
@@ -102,7 +114,7 @@ class GameBoard extends StatelessWidget {
                           alignment: WrapAlignment.center,
                           spacing: 0, // gap between adjacent chips
                           runSpacing: 4, // gap between lines
-                          children: teste
+                          children: answer
                               .split('')
                               .map((element) => Container(
                                   margin: const EdgeInsets.all(3),
@@ -139,11 +151,11 @@ class GameBoard extends StatelessWidget {
                                   size: 24.0,
                                   semanticLabel: 'Dica da Rodada',
                                 )),
-                            const Expanded(
-                                child: Text("Dica aqui",
+                            Expanded(
+                                child: Text(hint,
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)))
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)))
                           ]))),
                 ])));
   }

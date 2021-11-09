@@ -16,6 +16,14 @@ class Middle extends StatelessWidget {
   final bool isWaitingMainPlayer;
   final String waitingMainPlayerMessage;
 
+  //Round
+  final String theme;
+  final String answer;
+  final String hint;
+  final int currentRound;
+  final int nAmount;
+  final bool isGameStarted;
+
   const Middle({
     Key? key,
     required this.messages,
@@ -28,6 +36,12 @@ class Middle extends StatelessWidget {
     required this.timerWaitWord,
     required this.totalTimer,
     required this.totalTimerWaitWord,
+    required this.theme,
+    required this.answer,
+    required this.hint,
+    required this.currentRound,
+    required this.nAmount,
+    required this.isGameStarted,
   }) : super(key: key);
 
   @override
@@ -54,11 +68,17 @@ class Middle extends StatelessWidget {
                       timerWaitWord: timerWaitWord,
                       totalTimerWaitWord: totalTimerWaitWord,
                       waitingMainPlayerMessage: waitingMainPlayerMessage)
+                else if (isGameStarted)
+                  GameBoard(
+                    theme: theme,
+                    answer: answer,
+                    hint: hint,
+                    currentRound: currentRound,
+                    nAmount: nAmount,
+                  )
                 else
                   TimerToStart(
                       seconds: timer.toString(), totalTimer: totalTimer),
-                // const TimerToStart(),
-                // GameBoard(),
                 Chat(messages: messages),
               ],
             )));
