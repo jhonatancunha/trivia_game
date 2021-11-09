@@ -78,7 +78,7 @@ class Server():
     session = self.sio.get_session(sid)
     room_key = session['room']
     room = self.get_room(room_key)
-    player = self.room.get_player(sid)
+    player = room.get_player(sid)
 
     self.sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=room.get_key())
 
