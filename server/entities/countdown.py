@@ -14,12 +14,10 @@ class CountDown():
   def start(self):
     self.started = True
     while self.counter >= 0 and self.started == True:
-      print("iniciando")
       self.sio.emit(self.event, jsons.dumps({"total_time": self.backup_counter, "time": self.counter}), to=self.room)
       self.counter -= 1
       self.sio.sleep(1)
 
-    print("saiu")
     if self.counter < 0:
       self.stop()
       self.callback()

@@ -1,5 +1,6 @@
 from collections import defaultdict
 import jsons
+import re
 
 # ENTITIES
 from entities.player import Player
@@ -15,6 +16,7 @@ class Room():
     self.is_round_started = False
     self.sio = sio
     self.answer = ''
+    self.answer_mask = ''
     self.theme = ''
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
@@ -65,30 +67,55 @@ class Room():
 
 
   def get_round_player(self):
-    if self.round != None:
-      sid = self.sid_list[self.round % len(self.sid_list)]
-      return self.players[sid]
+    sid = self.sid_list[self.round % len(self.sid_list)]
+    return self.players[sid]
 
   def round_player(self):
-    player = self.get_round_player()
+    if self.round < self.rounds_quantity:
+      player = self.get_round_player()
 
-    self.sio.emit('currentRoundPlayer', to=player.get_sid())
+      self.sio.emit('currentRoundPlayer', to=player.get_sid())
+      self.sio.emit(
+        'roundPlayer',
+        jsons.dumps({"message": " %s está elaborando a palavra da rodada..." % player.get_nickname()}),
+        room=self.key,
+        skip_sid=player.get_sid()
+      )
+
+      self.sio.start_background_task(target=self.wait_word.start)
+
+      if self.round < self.rounds_quantity:
+        self.round += 1
+    
+    else:
+      self.finish_game()
+
+  def start_round(self):
     self.sio.emit(
-      'roundPlayer',
-      jsons.dumps({"message": " %s está elaborando a palavra da rodada..." % player.get_nickname()}),
-      room=self.key,
-      skip_sid=player.get_sid()
+      'startRound',
+      jsons.dumps({
+        "theme": self.theme,
+        "answer": self.answer_mask,
+        "hint": self.hint,
+        "current_round": self.round,
+        "n_amount": self.rounds_quantity
+      }),
+      to=self.key
     )
 
-    self.sio.start_background_task(target=self.wait_word.start)
-
-    if self.round < self.rounds_quantity:
-      self.round += 1
-  
+  def finish_game(self):
+    self.sio.emit(
+      'finishGame',
+      jsons.dumps({"players": self.get_all_players()}), 
+      to=self.key
+    )
 
   def set_round_word(self, answer, theme, hint):
     print(answer, theme, hint)
-    self.answer = answer
+    self.answer = answer.strip()
     self.theme = theme
     self.hint = hint
+    self.answer_mask = ''.join([' ' if x == ' ' else '*' for x in self.answer])
 
+    self.wait_word.stop()
+    self.start_round()
