@@ -1,6 +1,6 @@
 from collections import defaultdict
 import jsons
-import re
+from random import randint
 
 # ENTITIES
 from entities.player import Player
@@ -17,6 +17,7 @@ class Room():
     self.sio = sio
     self.answer = ''
     self.answer_mask = ''
+    self.amount_of_tips = 0
     self.theme = ''
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
@@ -112,6 +113,7 @@ class Room():
     )
 
     self.sio.start_background_task(target=self.round_timer.start)
+    self.sio.start_background_task(target=self.reveal_letter_handler)
 
 
   def finish_game(self):
@@ -121,6 +123,29 @@ class Room():
       to=self.key
     )
 
+  def reveal_letter(self):
+    letter_index = randint(0, len(self.answer_mask)-1)
+
+    while self.answer_mask[letter_index] != '*':
+      letter_index = randint(0, len(self.answer_mask))
+
+    word = list(self.answer_mask)
+    word[letter_index] = self.answer[letter_index]
+    self.answer_mask = ''.join(word)
+
+
+  def get_percentage_reveald(self):
+    return (self.amount_of_tips * 100) / len(self.answer)
+
+
+  def reveal_letter_handler(self):
+    print('oi')
+    while self.round_timer.get_started() == True and self.get_percentage_reveald() <= 60:
+      print('entrou no while')
+      self.sio.sleep(15)
+      self.reveal_letter()
+      self.amount_of_tips += 1
+      self.sio.emit('revealLetter', jsons.dumps({"answer_mask": self.answer_mask}))
 
   def set_round_word(self, answer, theme, hint):
     print(answer, theme, hint)
