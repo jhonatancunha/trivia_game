@@ -4,10 +4,14 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class InformationOfRound extends StatefulWidget {
   final Function sendInformationsOfRound;
+  final int timerWaitWord;
+  final int totalTimerWaitWord;
 
   const InformationOfRound({
     Key? key,
     required this.sendInformationsOfRound,
+    required this.timerWaitWord,
+    required this.totalTimerWaitWord,
   }) : super(key: key);
 
   @override
@@ -185,7 +189,8 @@ class _InformationOfRoundState extends State<InformationOfRound> {
                                       child: SfRadialGauge(axes: <RadialAxis>[
                                         RadialAxis(
                                             minimum: 0,
-                                            maximum: 60,
+                                            maximum: widget.totalTimerWaitWord
+                                                .toDouble(),
                                             showLabels: false,
                                             showTicks: false,
                                             axisLineStyle: AxisLineStyle(
@@ -198,7 +203,8 @@ class _InformationOfRoundState extends State<InformationOfRound> {
                                             ),
                                             pointers: <GaugePointer>[
                                               RangePointer(
-                                                  value: double.parse('10'),
+                                                  value: widget.timerWaitWord
+                                                      .toDouble(),
                                                   cornerStyle:
                                                       CornerStyle.bothCurve,
                                                   width: 0.2,
@@ -211,7 +217,9 @@ class _InformationOfRoundState extends State<InformationOfRound> {
                                                   positionFactor: 0.1,
                                                   angle: 90,
                                                   widget: Text(
-                                                      10.toString() + ' / 60',
+                                                      widget.timerWaitWord
+                                                              .toString() +
+                                                          ' / ${widget.totalTimerWaitWord}',
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,

@@ -4,8 +4,10 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class TimerToStart extends StatelessWidget {
   final String seconds;
-
-  const TimerToStart({Key? key, required this.seconds}) : super(key: key);
+  final int totalTimer;
+  const TimerToStart(
+      {Key? key, required this.seconds, required this.totalTimer})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class TimerToStart extends StatelessWidget {
                     child: SfRadialGauge(axes: <RadialAxis>[
                       RadialAxis(
                           minimum: 0,
-                          maximum: 60,
+                          maximum: totalTimer.toDouble(),
                           showLabels: false,
                           showTicks: false,
                           axisLineStyle: AxisLineStyle(
@@ -54,7 +56,7 @@ class TimerToStart extends StatelessWidget {
                             GaugeAnnotation(
                                 positionFactor: 0.1,
                                 angle: 90,
-                                widget: Text(seconds + ' / 60',
+                                widget: Text(seconds + ' / $totalTimer',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16)))

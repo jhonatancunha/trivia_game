@@ -21,7 +21,10 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final List<Message> _messages = <Message>[];
   final WebSocket websocket = WebSocket();
 
+  int totalTimer = 0;
   int timer = 0;
+  int _totalTimerWaitWord = 0;
+  int _timerWaitWord = 0;
 
   bool _waitingPlayers = true;
   bool _isMainPlayer = false;
@@ -54,9 +57,23 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('timer', (data) {
+      var totalTimeAux = json.decode(data.toString())['total_time'];
+      var timerAux = json.decode(data.toString())['time'];
+
       setState(() {
-        timer = data;
+        timer = timerAux;
+        totalTimer = totalTimeAux;
         _waitingPlayers = false;
+      });
+    });
+
+    websocket.socket.on('waitWord', (data) {
+      var totalTimeAux = json.decode(data.toString())['total_time'];
+      var timerAux = json.decode(data.toString())['time'];
+
+      setState(() {
+        _timerWaitWord = timerAux;
+        _totalTimerWaitWord = totalTimeAux;
       });
     });
 
@@ -110,6 +127,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     websocket.socket.on('currentRoundPlayer', (_) {
       setState(() {
         _isMainPlayer = true;
+        _isWaitingMainPlayer = false;
       });
     });
 
@@ -117,6 +135,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var message = json.decode(msg.toString())['message'];
 
       setState(() {
+        _isMainPlayer = false;
         _isWaitingMainPlayer = true;
         _waitingMainPlayerMessage = message;
       });
@@ -145,13 +164,17 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           children: [
             SideBar(players: _players),
             Middle(
-                messages: _messages,
-                timer: timer,
-                waitingPlayers: _waitingPlayers,
-                isMainPlayer: _isMainPlayer,
-                sendInformationsOfRound: websocket.sendInformationsOfRound,
-                isWaitingMainPlayer: _isWaitingMainPlayer,
-                waitingMainPlayerMessage: _waitingMainPlayerMessage),
+              messages: _messages,
+              timer: timer,
+              totalTimer: totalTimer,
+              waitingPlayers: _waitingPlayers,
+              isMainPlayer: _isMainPlayer,
+              sendInformationsOfRound: websocket.sendInformationsOfRound,
+              isWaitingMainPlayer: _isWaitingMainPlayer,
+              waitingMainPlayerMessage: _waitingMainPlayerMessage,
+              timerWaitWord: _timerWaitWord,
+              totalTimerWaitWord: _totalTimerWaitWord,
+            ),
           ],
         )),
         // BOTTOM SIDE

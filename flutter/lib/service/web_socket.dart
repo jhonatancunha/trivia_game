@@ -1,5 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:trivia/entities/player.dart';
+import 'package:trivia/entities/round_info.dart';
 
 class WebSocket {
   static final WebSocket _singleton = WebSocket._internal();
@@ -33,8 +34,8 @@ class WebSocket {
   }
 
   void sendInformationsOfRound(hint, theme, answer) {
-    var message = '{"hint": $hint, "theme": $theme, "answer": $answer}';
-    print(message);
+    RoundInfo info = RoundInfo(theme, hint, answer);
+    socket.emit('getWord', info.toJson());
   }
 
   IO.Socket getSocket() {

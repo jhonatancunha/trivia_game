@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class WaitMainPlayer extends StatelessWidget {
-  const WaitMainPlayer({Key? key}) : super(key: key);
+class WaitingPlayers extends StatelessWidget {
+  const WaitingPlayers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -14,11 +14,11 @@ class Room():
     self.rounds_quantity = 1
     self.is_round_started = False
     self.sio = sio
-    self.word = ''
+    self.answer = ''
     self.theme = ''
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
-    self.wait_word = CountDown(30, self.sio, 'waitWord', self.key, self.round_player)
+    self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
 
 
   def start_timer(self):
@@ -86,8 +86,9 @@ class Room():
       self.round += 1
   
 
-  def set_round_word(self, word, theme, hint):
-    self.word = word
+  def set_round_word(self, answer, theme, hint):
+    print(answer, theme, hint)
+    self.answer = answer
     self.theme = theme
     self.hint = hint
 

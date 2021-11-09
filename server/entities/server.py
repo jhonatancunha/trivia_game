@@ -62,7 +62,7 @@ class Server():
     session = self.sio.get_session(sid)
     room_key = session['room']
     room = self.get_room(room_key)
-    player = self.room.get_player(sid)
+    player = room.get_player(sid)
 
     # Removendo player da sala
     self.sio.leave_room(sid, room_key)
@@ -84,7 +84,7 @@ class Server():
 
   # @self.sio.on('getWord')
   def get_word(self, sid, environ):
-    word = environ.get('word')
+    answer = environ.get('answer')
     theme = environ.get('theme')
     hint = environ.get('hint')
 
@@ -92,4 +92,4 @@ class Server():
     room_key = session['room']
     room = self.get_room(room_key)
 
-    room.set_round_word(word, theme, hint)
+    room.set_round_word(answer, theme, hint)

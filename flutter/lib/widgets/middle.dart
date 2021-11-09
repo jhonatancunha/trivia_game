@@ -6,7 +6,10 @@ import 'package:hexcolor/hexcolor.dart';
 
 class Middle extends StatelessWidget {
   final List<Message> messages;
+  final int totalTimer;
   final int timer;
+  final int timerWaitWord;
+  final int totalTimerWaitWord;
   final bool waitingPlayers;
   final bool isMainPlayer;
   final Function sendInformationsOfRound;
@@ -22,6 +25,9 @@ class Middle extends StatelessWidget {
     required this.sendInformationsOfRound,
     required this.isWaitingMainPlayer,
     required this.waitingMainPlayerMessage,
+    required this.timerWaitWord,
+    required this.totalTimer,
+    required this.totalTimerWaitWord,
   }) : super(key: key);
 
   @override
@@ -37,16 +43,20 @@ class Middle extends StatelessWidget {
                 const WindowTitleBar(),
                 // const WaitingMainPlayer(seconds: '60'),
                 if (waitingPlayers)
-                  const WaitMainPlayer()
+                  const WaitingPlayers()
                 else if (isMainPlayer)
                   InformationOfRound(
+                      timerWaitWord: timerWaitWord,
+                      totalTimerWaitWord: totalTimerWaitWord,
                       sendInformationsOfRound: sendInformationsOfRound)
                 else if (isWaitingMainPlayer)
                   WaitingMainPlayer(
-                      seconds: '10',
+                      timerWaitWord: timerWaitWord,
+                      totalTimerWaitWord: totalTimerWaitWord,
                       waitingMainPlayerMessage: waitingMainPlayerMessage)
                 else
-                  TimerToStart(seconds: timer.toString()),
+                  TimerToStart(
+                      seconds: timer.toString(), totalTimer: totalTimer),
                 // const TimerToStart(),
                 // GameBoard(),
                 Chat(messages: messages),

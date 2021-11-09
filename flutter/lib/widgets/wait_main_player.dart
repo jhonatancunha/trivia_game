@@ -3,10 +3,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class WaitingMainPlayer extends StatelessWidget {
-  final String seconds;
   final String waitingMainPlayerMessage;
+  final int timerWaitWord;
+  final int totalTimerWaitWord;
+
   const WaitingMainPlayer(
-      {Key? key, required this.seconds, required this.waitingMainPlayerMessage})
+      {Key? key,
+      required this.waitingMainPlayerMessage,
+      required this.timerWaitWord,
+      required this.totalTimerWaitWord})
       : super(key: key);
 
   @override
@@ -35,7 +40,7 @@ class WaitingMainPlayer extends StatelessWidget {
                     child: SfRadialGauge(axes: <RadialAxis>[
                       RadialAxis(
                           minimum: 0,
-                          maximum: 60,
+                          maximum: totalTimerWaitWord.toDouble(),
                           showLabels: false,
                           showTicks: false,
                           axisLineStyle: AxisLineStyle(
@@ -46,7 +51,7 @@ class WaitingMainPlayer extends StatelessWidget {
                           ),
                           pointers: <GaugePointer>[
                             RangePointer(
-                                value: double.parse(seconds),
+                                value: timerWaitWord.toDouble(),
                                 cornerStyle: CornerStyle.bothCurve,
                                 width: 0.2,
                                 sizeUnit: GaugeSizeUnit.factor,
@@ -56,7 +61,9 @@ class WaitingMainPlayer extends StatelessWidget {
                             GaugeAnnotation(
                                 positionFactor: 0.1,
                                 angle: 90,
-                                widget: Text(seconds + ' / 60',
+                                widget: Text(
+                                    timerWaitWord.toString() +
+                                        ' / $totalTimerWaitWord',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16)))
