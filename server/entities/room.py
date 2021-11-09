@@ -21,15 +21,18 @@ class Room():
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
     self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
+    self.round_timer = CountDown(60, self.sio, 'round', self.key, self.round_player)
 
 
   def start_timer(self):
     if self.wait_players.get_started() == False:
       self.sio.start_background_task(target=self.wait_players.start)
 
+
   def set_key(self, key):
     self.key = key
-  
+
+
   def set_player(self, sid, player):
     self.players[sid] = player
     self.sid_list.append(sid)
@@ -39,13 +42,16 @@ class Room():
 
     if len(self.players) >= 2:
       self.start_timer()
-  
+
+
   def get_key(self):
     return self.key
-  
+
+
   def get_all_players(self):
     return self.players
-  
+
+
   def get_player(self, sid):
     if sid in self.players:
       return self.players[sid]
@@ -70,6 +76,7 @@ class Room():
     sid = self.sid_list[self.round % len(self.sid_list)]
     return self.players[sid]
 
+
   def round_player(self):
     if self.round < self.rounds_quantity:
       player = self.get_round_player()
@@ -90,6 +97,7 @@ class Room():
     else:
       self.finish_game()
 
+
   def start_round(self):
     self.sio.emit(
       'startRound',
@@ -103,12 +111,16 @@ class Room():
       to=self.key
     )
 
+    self.sio.start_background_task(target=self.round_timer.start)
+
+
   def finish_game(self):
     self.sio.emit(
       'finishGame',
       jsons.dumps({"players": self.get_all_players()}), 
       to=self.key
     )
+
 
   def set_round_word(self, answer, theme, hint):
     print(answer, theme, hint)
