@@ -14,13 +14,16 @@ class Room():
     self.rounds_quantity = 1
     self.is_round_started = False
     self.sio = sio
-    self.countdown = CountDown(10, self.sio, 'timer', self.key, self.round_player)
+    self.word = ''
+    self.theme = ''
+    self.hint = ''
+    self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
+    self.wait_word = CountDown(30, self.sio, 'waitWord', self.key, self.round_player)
 
 
   def start_timer(self):
-    if self.countdown.get_started() == False:
-      self.countdown.set_started(True)
-      self.sio.start_background_task(target=self.countdown.start)
+    if self.wait_players.get_started() == False:
+      self.sio.start_background_task(target=self.wait_players.start)
 
   def set_key(self, key):
     self.key = key
@@ -54,11 +57,12 @@ class Room():
       del(self.sid_list[self.sid_list.index(sid)])
 
     if len(self.players) < 2:
-      self.countdown.stop()
+      self.wait_players.stop()
       self.sio.emit('stopCountDown', room=self.key)
 
     if not self.is_round_started:
       self.rounds_quantity /= 2
+
 
   def get_round_player(self):
     if self.round != None:
@@ -76,6 +80,14 @@ class Room():
       skip_sid=player.get_sid()
     )
 
+    self.sio.start_background_task(target=self.wait_word.start)
+
     if self.round < self.rounds_quantity:
       self.round += 1
   
+
+  def set_round_word(self, word, theme, hint):
+    self.word = word
+    self.theme = theme
+    self.hint = hint
+
