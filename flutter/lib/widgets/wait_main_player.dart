@@ -4,8 +4,10 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class WaitingMainPlayer extends StatelessWidget {
   final String seconds;
-
-  const WaitingMainPlayer({Key? key, required this.seconds}) : super(key: key);
+  final String waitingMainPlayerMessage;
+  const WaitingMainPlayer(
+      {Key? key, required this.seconds, required this.waitingMainPlayerMessage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,10 @@ class WaitingMainPlayer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                        "Aguardando jogador da vez informar os dados da rodada!",
-                        style: TextStyle(
+                Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(waitingMainPlayerMessage,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16))),
                 SizedBox(
                     width: 200,

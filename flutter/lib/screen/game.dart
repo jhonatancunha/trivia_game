@@ -23,13 +23,18 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
   int timer = 0;
 
-  bool _waitingPlayers = false;
-  bool _isMainPlayer = true;
+  bool _waitingPlayers = true;
+  bool _isMainPlayer = false;
+  bool _isWaitingMainPlayer = false;
+  late String _waitingMainPlayerMessage;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    setState(() {
+      _waitingMainPlayerMessage = '';
+    });
     initSocket();
   }
 
@@ -107,6 +112,18 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         _isMainPlayer = true;
       });
     });
+
+    websocket.socket.on('roundPlayer', (msg) {
+      print("nao sou da rodada");
+      var message = json.decode(msg.toString())['message'];
+
+      print(message);
+
+      setState(() {
+        _isWaitingMainPlayer = true;
+        _waitingMainPlayerMessage = message;
+      });
+    });
   }
 
   @override
@@ -131,12 +148,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           children: [
             SideBar(players: _players),
             Middle(
-              messages: _messages,
-              timer: timer,
-              waitingPlayers: _waitingPlayers,
-              isMainPlayer: _isMainPlayer,
-              sendInformationsOfRound: websocket.sendInformationsOfRound,
-            ),
+                messages: _messages,
+                timer: timer,
+                waitingPlayers: _waitingPlayers,
+                isMainPlayer: _isMainPlayer,
+                sendInformationsOfRound: websocket.sendInformationsOfRound,
+                isWaitingMainPlayer: _isWaitingMainPlayer,
+                waitingMainPlayerMessage: _waitingMainPlayerMessage),
           ],
         )),
         // BOTTOM SIDE

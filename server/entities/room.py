@@ -72,7 +72,7 @@ class Room():
     self.sio.emit('currentRoundPlayer', to=player.get_sid())
     self.sio.emit(
       'roundPlayer',
-      jsons.dumps({"message": " é o jogador da vez", "nickname": player.get_nickname()}),
+      jsons.dumps({"message": " %s está elaborando a palavra da rodada..." % player.get_nickname()}),
       room=self.key,
       skip_sid=player.get_sid()
     )
