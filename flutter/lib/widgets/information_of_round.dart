@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:hexcolor/hexcolor.dart';
 
 class InformationOfRound extends StatefulWidget {
@@ -22,8 +21,6 @@ class _InformationOfRoundState extends State<InformationOfRound> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
     super.dispose();
   }
 

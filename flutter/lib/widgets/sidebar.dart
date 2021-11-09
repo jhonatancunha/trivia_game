@@ -10,9 +10,7 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint(players.length);
     return SizedBox(
-        // height: double.infinity,
         width: 280,
         child: Container(
             decoration: BoxDecoration(

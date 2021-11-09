@@ -114,10 +114,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('roundPlayer', (msg) {
-      print("nao sou da rodada");
       var message = json.decode(msg.toString())['message'];
-
-      print(message);
 
       setState(() {
         _isWaitingMainPlayer = true;

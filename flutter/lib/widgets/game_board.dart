@@ -44,8 +44,6 @@ class GameBoard extends StatelessWidget {
       color = HexColor('#393B4B');
     }
 
-    // return HexColor('#877CE8');
-
     return BoxShadow(
       color: color,
       spreadRadius: 1,
@@ -56,7 +54,6 @@ class GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint(players.length);
     return SizedBox(
         child: Container(
             decoration: BoxDecoration(

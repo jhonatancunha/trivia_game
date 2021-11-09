@@ -66,7 +66,6 @@ class Room():
       return self.players[sid]
 
   def round_player(self):
-    print("aqui")
     player = self.get_round_player()
 
     self.sio.emit('currentRoundPlayer', to=player.get_sid())
