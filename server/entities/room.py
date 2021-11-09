@@ -14,7 +14,7 @@ class Room():
     self.rounds_quantity = 1
     self.is_round_started = False
     self.sio = sio
-    self.countdown = CountDown(60, self.sio, 'timer', self.key, self.round_player)
+    self.countdown = CountDown(10, self.sio, 'timer', self.key, self.round_player)
 
 
   def start_timer(self):
@@ -66,6 +66,7 @@ class Room():
       return self.players[sid]
 
   def round_player(self):
+    print("aqui")
     player = self.get_round_player()
 
     self.sio.emit('currentRoundPlayer', to=player.get_sid())
@@ -78,3 +79,4 @@ class Room():
 
     if self.round < self.rounds_quantity:
       self.round += 1
+  
