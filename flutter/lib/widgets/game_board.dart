@@ -1,11 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
 //  teste.split('').map((element) => Text(element)).toList(),
 class GameBoard extends StatelessWidget {
-  GameBoard({Key? key}) : super(key: key);
-  String teste = "O *essé é um *tario";
+  final String theme;
+  final String answer;
+  final String hint;
+
+  final int currentRound;
+  final int nAmount;
+  final int roundTimer;
+  final int totalRoundTimer;
+
+  const GameBoard({
+    Key? key,
+    required this.theme,
+    required this.answer,
+    required this.hint,
+    required this.currentRound,
+    required this.nAmount,
+    required this.roundTimer,
+    required this.totalRoundTimer,
+  }) : super(key: key);
 
   renderLetter(letter) {
     var caracter = letter;
@@ -70,7 +88,7 @@ class GameBoard extends StatelessWidget {
                   Tooltip(
                       message: 'TEMA DA RODADA',
                       child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(10),
                           width: MediaQuery.of(context).size.width / 2,
                           decoration: BoxDecoration(
                             color: HexColor('#393B4B'),
@@ -80,17 +98,17 @@ class GameBoard extends StatelessWidget {
                           child: Row(children: [
                             Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                child: Icon(
-                                  Icons.assistant_photo_rounded,
-                                  color: HexColor('#6B5FCD'),
-                                  size: 24.0,
-                                  semanticLabel: 'Tema da Rodada',
-                                )),
-                            const Expanded(
-                                child: Text("Tema aqui",
+                                child: Text('TEMA',
                                     textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)))
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: HexColor("#6B5FCD"),
+                                        fontSize: 16))),
+                            Expanded(
+                                child: Text(theme,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)))
                           ]))),
                   // Text("TEXTO DE ${teste.length} LETRAS"),
                   Row(
@@ -102,7 +120,7 @@ class GameBoard extends StatelessWidget {
                           alignment: WrapAlignment.center,
                           spacing: 0, // gap between adjacent chips
                           runSpacing: 4, // gap between lines
-                          children: teste
+                          children: answer
                               .split('')
                               .map((element) => Container(
                                   margin: const EdgeInsets.all(3),
@@ -119,32 +137,75 @@ class GameBoard extends StatelessWidget {
                               .toList(),
                         ))
                       ]),
-                  Tooltip(
-                      message: 'DICA DA RODADA',
-                      child: Container(
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                          width: MediaQuery.of(context).size.width / 2,
-                          decoration: BoxDecoration(
-                            color: HexColor('#393B4B'),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                          ),
-                          child: Row(children: [
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                child: Icon(
-                                  Icons.album_sharp,
-                                  color: HexColor('#6B5FCD'),
-                                  size: 24.0,
-                                  semanticLabel: 'Dica da Rodada',
-                                )),
-                            const Expanded(
-                                child: Text("Dica aqui",
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)))
-                          ]))),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                            message: 'DICA DA RODADA',
+                            child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                width: MediaQuery.of(context).size.width / 2,
+                                decoration: BoxDecoration(
+                                  color: HexColor('#393B4B'),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                ),
+                                child: Row(children: [
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
+                                      child: Text('DICA',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: HexColor("#6B5FCD"),
+                                              fontSize: 16))),
+                                  Expanded(
+                                      child: Text(hint,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold)))
+                                ]))),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 15),
+                            child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: SfRadialGauge(axes: <RadialAxis>[
+                                  RadialAxis(
+                                      minimum: 0,
+                                      maximum: totalRoundTimer.toDouble(),
+                                      showLabels: false,
+                                      showTicks: false,
+                                      axisLineStyle: AxisLineStyle(
+                                        thickness: 0.2,
+                                        cornerStyle: CornerStyle.bothCurve,
+                                        color: HexColor('#2E303F'),
+                                        thicknessUnit: GaugeSizeUnit.factor,
+                                      ),
+                                      pointers: <GaugePointer>[
+                                        RangePointer(
+                                            value: roundTimer.toDouble(),
+                                            cornerStyle: CornerStyle.bothCurve,
+                                            width: 0.2,
+                                            sizeUnit: GaugeSizeUnit.factor,
+                                            color: HexColor("#6B5FCD"))
+                                      ],
+                                      annotations: <GaugeAnnotation>[
+                                        GaugeAnnotation(
+                                            positionFactor: 0.1,
+                                            angle: 90,
+                                            widget: Text(
+                                                roundTimer.toString() +
+                                                    ' / $totalRoundTimer',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 10)))
+                                      ])
+                                ]))),
+                      ])
                 ])));
   }
 }
