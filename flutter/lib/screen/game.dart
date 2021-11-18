@@ -109,7 +109,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       for (var player in playersList.values) {
         var nickname = player['nickname'];
         var score = player['score'];
-        Player newPlayer = Player(nickname, score);
+        var correctAsnwer = player['correct_asnwer'];
+
+        print("corect $correctAsnwer");
+
+        Player newPlayer = Player(nickname, score, correctAsnwer);
         setState(() {
           _players.add(newPlayer);
         });
@@ -131,6 +135,42 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('messageChat', (msg) {
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+      setState(() {
+        _messages.add(objMessage);
+      });
+      ChatController.scrollDown();
+    });
+
+    websocket.socket.on('almostCorrect', (msg) {
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+      setState(() {
+        _messages.add(objMessage);
+      });
+      ChatController.scrollDown();
+    });
+
+    websocket.socket.on('youAreRight', (msg) {
+      var message = json.decode(msg.toString())['message'];
+      var nickname = json.decode(msg.toString())['nickname'];
+      var type = json.decode(msg.toString())['type'];
+      Message objMessage = Message(nickname, message, type);
+
+      setState(() {
+        _messages.add(objMessage);
+      });
+      ChatController.scrollDown();
+    });
+
+    websocket.socket.on('someoneIsRight', (msg) {
       var message = json.decode(msg.toString())['message'];
       var nickname = json.decode(msg.toString())['nickname'];
       var type = json.decode(msg.toString())['type'];

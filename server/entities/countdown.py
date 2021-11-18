@@ -31,3 +31,6 @@ class CountDown():
 
   def set_started(self, started):
     self.started = started
+    
+  def get_current_time(self):
+    return self.counter

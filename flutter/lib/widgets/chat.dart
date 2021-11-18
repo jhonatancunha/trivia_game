@@ -32,12 +32,23 @@ class Chat extends StatelessWidget {
                             style: const TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold));
-                      }
-                      if (messages[index].type == 'leave') {
+                      } else if (messages[index].type == 'leave') {
                         return Text(
                             messages[index].nickname + messages[index].message,
                             style: TextStyle(
                                 color: HexColor("#EB5D5E"),
+                                fontWeight: FontWeight.bold));
+                      } else if (messages[index].type == 'you_are_right' ||
+                          messages[index].type == 'someone_is_right') {
+                        return Text(
+                            messages[index].nickname + messages[index].message,
+                            style: TextStyle(
+                                color: HexColor("#2CA980"),
+                                fontWeight: FontWeight.bold));
+                      } else if (messages[index].type == 'almost_correct') {
+                        return Text(messages[index].message,
+                            style: TextStyle(
+                                color: HexColor("#FFBB38"),
                                 fontWeight: FontWeight.bold));
                       } else {
                         return Row(

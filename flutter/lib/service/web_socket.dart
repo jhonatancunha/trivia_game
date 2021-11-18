@@ -8,7 +8,7 @@ class WebSocket {
   bool isSocketOn = false;
 
   void joinRoom(nickname) {
-    Player player = Player(nickname, "0");
+    Player player = Player(nickname, 0, false);
     socket.emit('join', player.toJson());
   }
 

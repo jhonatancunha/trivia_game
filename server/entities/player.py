@@ -5,6 +5,7 @@ class Player():
     self.nickname = nickname
     self.score = score
     self.room = room
+    self.correct_asnwer = False
     
   
   def set_sid(self, sid):
@@ -32,4 +33,9 @@ class Player():
   
   def get_room(self):
     return self.room
+  
+  def right_answer(self, time, point_of_question):
+    self.correct_asnwer = True
+    self.score += point_of_question
+    
   

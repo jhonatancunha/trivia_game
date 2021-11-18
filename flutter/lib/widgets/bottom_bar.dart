@@ -40,6 +40,12 @@ class _BottomBartState extends State<BottomBart> {
         enableInput = true;
       });
     });
+
+    widget.websocket.socket.on('youAreRight', (msg) {
+      setState(() {
+        enableInput = false;
+      });
+    });
   }
 
   @override
@@ -85,8 +91,7 @@ class _BottomBartState extends State<BottomBart> {
                   borderSide:
                       BorderSide(color: HexColor('#2E303F'), width: 1.0),
                 ),
-                labelText:
-                    enableInput ? 'Digite aqui...' : 'Você é jogador da vez...',
+                labelText: enableInput ? 'Digite aqui...' : '🙈',
                 labelStyle: const TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.normal,

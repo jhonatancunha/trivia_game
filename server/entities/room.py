@@ -1,6 +1,8 @@
 from collections import defaultdict
 import jsons
 from random import randint
+from fuzzywuzzy import fuzz
+
 # from rich import inspect
 
 # ENTITIES
@@ -50,6 +52,7 @@ class Room():
 
 
   def get_all_players(self):
+    self.players = defaultdict(Player, dict(sorted(self.players.items(), key=lambda k: k[1].score, reverse=True)))
     return self.players
 
 
@@ -175,8 +178,26 @@ class Room():
     if self.round_timer.get_started() == False:
       self.sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=self.key)
     else:
-      self.correct_word(message)
+      self.correct_word(message, player)
   
   
-  def correct_word(self, word):
-    print(word)
+  def correct_word(self, word, player):
+    percentage = fuzz.ratio(word, self.answer)
+    
+    print(percentage)
+    
+    if percentage == 100:
+      player.right_answer(self.round_timer.get_current_time(), 30)
+      
+      message = "Você acertou!"
+      self.sio.emit('youAreRight', jsons.dumps({"message": message, "nickname": '', "type": "you_are_right"}), to=player.get_sid())
+      message = "%s acertou!" % player.get_nickname()
+      self.sio.emit('someoneIsRight', jsons.dumps({"message": message, "nickname": '', "type": "someone_is_right"}), room=self.key, skip_sid=player.get_sid())
+      
+      self.sio.emit('listOfPlayers', jsons.dumps({"players": self.get_all_players()}), to=self.key)
+      
+    elif percentage >= 65:
+      message = "%s está perto!" % word
+      self.sio.emit('almostCorrect', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "almost_correct"}), to=player.get_sid())
+    else:
+      self.sio.emit('messageChat', jsons.dumps({"message": word, "nickname": player.get_nickname(), "type": "chat"}), room=self.key)
