@@ -43,7 +43,7 @@ class Room():
     self.sid_list.append(sid)
 
     if not self.round_timer.get_started():
-      self.rounds_quantity = 1
+      self.rounds_quantity *= 2
 
     if len(self.players) >= 2:
       self.start_timer()
