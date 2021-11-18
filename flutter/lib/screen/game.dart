@@ -8,6 +8,9 @@ import 'dart:convert';
 import 'package:trivia/entities/player.dart';
 import 'package:trivia/entities/message.dart';
 
+// Screens
+import 'package:trivia/screen/rank.dart';
+
 class GameScreen extends StatefulWidget {
   final String nickname;
   const GameScreen({Key? key, required this.nickname}) : super(key: key);
@@ -237,6 +240,45 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var answerMask = json.decode(data.toString())['answer_mask'];
 
       setState(() => {_answer = answerMask});
+    });
+
+    websocket.socket.on('finishGame', (players) {
+      Map<String, dynamic> topPlayersList =
+          Map<String, dynamic>.from(json.decode(players)['topPlayers']);
+
+      Map<String, dynamic> otherPlayersList =
+          Map<String, dynamic>.from(json.decode(players)['otherPlayers']);
+
+      final List<Player> topPlayers = <Player>[];
+      final List<Player> otherPlayers = <Player>[];
+
+      for (var player in topPlayersList.values) {
+        var nickname = player['nickname'];
+        var score = player['score'];
+        var correctAsnwer = player['correct_asnwer'];
+
+        Player newPlayer = Player(nickname, score, correctAsnwer);
+        topPlayers.add(newPlayer);
+      }
+
+      for (var player in otherPlayersList.values) {
+        var nickname = player['nickname'];
+        var score = player['score'];
+        var correctAsnwer = player['correct_asnwer'];
+
+        Player newPlayer = Player(nickname, score, correctAsnwer);
+        otherPlayers.add(newPlayer);
+      }
+
+      print(topPlayers);
+      print(otherPlayers);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                Rank(topPlayers: topPlayers, otherPlayers: otherPlayers)),
+      );
     });
   }
 

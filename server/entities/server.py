@@ -49,6 +49,8 @@ class Server():
 
     # Adicionando player ao quarto
     new_player = Player(sid, nickname, score, room.get_key())
+    
+    
     room.set_player(new_player.get_sid(), new_player)
     self.sio.enter_room(sid, room.get_key())
 

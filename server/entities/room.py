@@ -2,6 +2,7 @@ from collections import defaultdict
 import jsons
 from random import randint
 from fuzzywuzzy import fuzz
+import itertools
 
 # from rich import inspect
 
@@ -26,6 +27,7 @@ class Room():
     self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
     self.round_timer = CountDown(60, self.sio, 'roundTimer', self.key, self.round_player)
     self.thread_reveal_letter = False
+    self.amount_of_right_answer = 0
 
   def start_timer(self):
     if self.wait_players.get_started() == False:
@@ -41,7 +43,7 @@ class Room():
     self.sid_list.append(sid)
 
     if not self.round_timer.get_started():
-      self.rounds_quantity *= 2
+      self.rounds_quantity = 1
 
     if len(self.players) >= 2:
       self.start_timer()
@@ -88,7 +90,9 @@ class Room():
   def round_player(self):
     if self.round < self.rounds_quantity:
       player = self.get_round_player()
-
+      
+      self.amount_of_right_answer = 0
+      
       self.sio.emit('currentRoundPlayer', to=player.get_sid())
       self.sio.emit(
         'roundPlayer',
@@ -120,19 +124,39 @@ class Room():
     )
     
     self.reset_tips_reveal_letter()
-
     # inspect(self.thread_reveal_letter, methods=True)
     self.sio.start_background_task(target=self.round_timer.start)
     self.thread_reveal_letter = self.sio.start_background_task(target=self.reveal_letter_handler)
 
 
   def finish_game(self):
+    all_players = self.get_all_players()
+    
+    max_idx_rank = 3 if len(all_players) > 3 else len(all_players)
+     
+    topPlayers = dict(list(all_players.items())[:max_idx_rank])
+
+    otherPlayers = []
+    if max_idx_rank == 3:
+      otherPlayers = dict(list(all_players.items())[max_idx_rank:len(all_players)])
+    
+
+    
     self.sio.emit(
       'finishGame',
-      jsons.dumps({"players": self.get_all_players()}), 
+      jsons.dumps({"topPlayers": defaultdict(Player, topPlayers), "otherPlayers": defaultdict(Player, otherPlayers)}), 
       to=self.key
     )
-
+    
+    
+    self.round = 0
+    self.rounds_quantity = 1
+    self.reset_tips_reveal_letter()
+    
+    for sid in self.sid_list:
+      self.remove_player(sid)
+      
+    
   def reset_tips_reveal_letter(self):
     if self.thread_reveal_letter != False:
       self.thread_reveal_letter.kill()
@@ -183,18 +207,22 @@ class Room():
   
   def correct_word(self, word, player):
     percentage = fuzz.ratio(word, self.answer)
-    
-    print(percentage)
-    
+      
     if percentage == 100:
-      player.right_answer(self.round_timer.get_current_time(), 30)
+      player.right_answer(self.round_timer.get_current_time(), 5)
+      
       
       message = "Você acertou!"
       self.sio.emit('youAreRight', jsons.dumps({"message": message, "nickname": '', "type": "you_are_right"}), to=player.get_sid())
       message = "%s acertou!" % player.get_nickname()
       self.sio.emit('someoneIsRight', jsons.dumps({"message": message, "nickname": '', "type": "someone_is_right"}), room=self.key, skip_sid=player.get_sid())
-      
       self.sio.emit('listOfPlayers', jsons.dumps({"players": self.get_all_players()}), to=self.key)
+      
+      
+      self.amount_of_right_answer += 1
+      if self.amount_of_right_answer == len(self.players)-1:
+        self.round_timer.stop()
+        self.round_player()
       
     elif percentage >= 65:
       message = "%s está perto!" % word

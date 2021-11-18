@@ -36,6 +36,6 @@ class Player():
   
   def right_answer(self, time, point_of_question):
     self.correct_asnwer = True
-    self.score += point_of_question
+    self.score += point_of_question * time
     
   

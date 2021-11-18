@@ -8,38 +8,11 @@ import 'package:trivia/entities/player.dart';
 // Screens
 import 'package:trivia/screen/initialScreen.dart';
 
-class Rank extends StatefulWidget {
-  const Rank({Key? key}) : super(key: key);
-
-  @override
-  _RankState createState() => _RankState();
-}
-
-class _RankState extends State<Rank> {
-  final List<Player> topPlayers = <Player>[];
-  final List<Player> otherPlayers = <Player>[];
-
-  @override
-  void initState() {
-    super.initState();
-    Player p1 = Player("p1p1p1p1p1p1p1p1p1p1p1p1", "300");
-    Player p2 = Player("p2p1p1p1p1p1p1p1p1p1p1p1p1p1", "200");
-    Player p3 = Player("p3p1p1p1p1p1p1p1p1p1p1p1p1p1", "100");
-
-    topPlayers.add(p1);
-    topPlayers.add(p2);
-    topPlayers.add(p3);
-
-    Player p4 = Player("teste", "50");
-    Player p5 = Player("ada", "40");
-    Player p6 = Player("ola", "10");
-    Player p7 = Player("hehe", "10");
-
-    otherPlayers.add(p4);
-    otherPlayers.add(p5);
-    otherPlayers.add(p6);
-    otherPlayers.add(p7);
-  }
+class Rank extends StatelessWidget {
+  List<Player> topPlayers = <Player>[];
+  List<Player> otherPlayers = <Player>[];
+  Rank({Key? key, required this.topPlayers, required this.otherPlayers})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,150 +26,156 @@ class _RankState extends State<Rank> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Column(children: [
-                    CircleAvatar(
-                      backgroundColor: HexColor("#6B5FCD"),
-                      child: Text(topPlayers[1].nickname[0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    SizedBox(
-                        width: 80,
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
-                            child: Column(children: [
-                              Text(
-                                topPlayers[1].nickname,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                topPlayers[1].score,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              )
-                            ]))),
-                    SizedBox(
-                        width: 80,
-                        height: 100,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: HexColor("#6B5FCD"),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: HexColor('#877CE8'),
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: const Offset(
-                                      0, -7), // changes position of shadow
+                  if (topPlayers.isNotEmpty) ...[
+                    Column(children: [
+                      CircleAvatar(
+                        backgroundColor: HexColor("#6B5FCD"),
+                        child: Text(topPlayers[1].nickname[0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                      SizedBox(
+                          width: 80,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
+                              child: Column(children: [
+                                Text(
+                                  topPlayers[1].nickname,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  topPlayers[1].score.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 )
-                              ],
-                            ),
-                            child: const Center(
-                                child: Text(
-                              '#2',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 40),
-                              textAlign: TextAlign.center,
-                            ))))
-                  ]),
-                  Column(children: [
-                    CircleAvatar(
-                      backgroundColor: HexColor("#6B5FCD"),
-                      child: Text(topPlayers[0].nickname[0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    SizedBox(
-                        width: 120,
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
-                            child: Column(children: [
-                              Text(
-                                topPlayers[0].nickname,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              ]))),
+                      SizedBox(
+                          width: 80,
+                          height: 100,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: HexColor("#6B5FCD"),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: HexColor('#877CE8'),
+                                    spreadRadius: 0,
+                                    blurRadius: 0,
+                                    offset: const Offset(
+                                        0, -7), // changes position of shadow
+                                  )
+                                ],
                               ),
-                              Text(
-                                topPlayers[0].score,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              )
-                            ]))),
-                    SizedBox(
-                        width: 120,
-                        height: 140,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: HexColor("#6B5FCD"),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: HexColor('#877CE8'),
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: const Offset(
-                                      0, -6), // changes position of shadow
+                              child: const Center(
+                                  child: Text(
+                                '#2',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40),
+                                textAlign: TextAlign.center,
+                              ))))
+                    ])
+                  ],
+                  if (topPlayers.length >= 2) ...[
+                    Column(children: [
+                      CircleAvatar(
+                        backgroundColor: HexColor("#6B5FCD"),
+                        child: Text(topPlayers[0].nickname[0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                      SizedBox(
+                          width: 120,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
+                              child: Column(children: [
+                                Text(
+                                  topPlayers[0].nickname,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  topPlayers[0].score.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 )
-                              ],
-                            ),
-                            child: const Center(
-                                child: Text(
-                              '#1',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 40),
-                              textAlign: TextAlign.center,
-                            ))))
-                  ]),
-                  Column(children: [
-                    CircleAvatar(
-                      backgroundColor: HexColor("#6B5FCD"),
-                      child: Text(topPlayers[2].nickname[0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    SizedBox(
-                        width: 70,
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
-                            child: Column(children: [
-                              Text(
-                                topPlayers[2].nickname,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              ]))),
+                      SizedBox(
+                          width: 120,
+                          height: 140,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: HexColor("#6B5FCD"),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: HexColor('#877CE8'),
+                                    spreadRadius: 0,
+                                    blurRadius: 0,
+                                    offset: const Offset(
+                                        0, -6), // changes position of shadow
+                                  )
+                                ],
                               ),
-                              Text(
-                                topPlayers[2].score,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              )
-                            ]))),
-                    SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: HexColor("#6B5FCD"),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: HexColor('#877CE8'),
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: const Offset(
-                                      0, -8), // changes position of shadow
+                              child: const Center(
+                                  child: Text(
+                                '#1',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40),
+                                textAlign: TextAlign.center,
+                              ))))
+                    ])
+                  ],
+                  if (topPlayers.length >= 3) ...[
+                    Column(children: [
+                      CircleAvatar(
+                        backgroundColor: HexColor("#6B5FCD"),
+                        child: Text(topPlayers[2].nickname[0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                      SizedBox(
+                          width: 70,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
+                              child: Column(children: [
+                                Text(
+                                  topPlayers[2].nickname,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  topPlayers[2].score.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 )
-                              ],
-                            ),
-                            child: const Center(
-                                child: Text(
-                              '#3',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 40),
-                              textAlign: TextAlign.center,
-                            ))))
-                  ]),
+                              ]))),
+                      SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: HexColor("#6B5FCD"),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: HexColor('#877CE8'),
+                                    spreadRadius: 0,
+                                    blurRadius: 0,
+                                    offset: const Offset(
+                                        0, -8), // changes position of shadow
+                                  )
+                                ],
+                              ),
+                              child: const Center(
+                                  child: Text(
+                                '#3',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40),
+                                textAlign: TextAlign.center,
+                              ))))
+                    ])
+                  ]
                 ],
               )
             ],
@@ -247,7 +226,10 @@ class _RankState extends State<Rank> {
                                                     color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            Text(otherPlayers[index].score,
+                                            Text(
+                                                otherPlayers[index]
+                                                    .score
+                                                    .toString(),
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                     color: Colors.white))

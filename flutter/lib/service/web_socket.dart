@@ -13,18 +13,22 @@ class WebSocket {
   }
 
   void init(nickname) {
-    socket = IO.io(
-        'http://127.0.0.1:8000',
-        IO.OptionBuilder()
-            .setTransports(['websocket']) //for Flutter or Dart VM
-            .disableAutoConnect()
-            .build());
+    if (!isSocketOn) {
+      socket = IO.io(
+          'http://127.0.0.1:8000',
+          IO.OptionBuilder()
+              .setTransports(['websocket']) //for Flutter or Dart VM
+              .disableAutoConnect()
+              .build());
 
-    socket.connect();
-    socket.onConnect((_) {
-      isSocketOn = true;
+      socket.connect();
+      socket.onConnect((_) {
+        isSocketOn = true;
+        joinRoom(nickname);
+      });
+    } else {
       joinRoom(nickname);
-    });
+    }
   }
 
   void sendMessage(message) {
