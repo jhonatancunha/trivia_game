@@ -1,6 +1,7 @@
 from collections import defaultdict
 import jsons
 from random import randint
+from rich import inspect
 
 # ENTITIES
 from entities.player import Player
@@ -23,7 +24,7 @@ class Room():
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
     self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
     self.round_timer = CountDown(60, self.sio, 'roundTimer', self.key, self.round_player)
-
+    self.thread_reveal_letter = False
 
   def start_timer(self):
     if self.wait_players.get_started() == False:
@@ -111,9 +112,12 @@ class Room():
       }),
       to=self.key
     )
+    
+    self.reset_tips_reveal_letter()
 
+    inspect(self.thread_reveal_letter, methods=True)
     self.sio.start_background_task(target=self.round_timer.start)
-    self.sio.start_background_task(target=self.reveal_letter_handler)
+    self.thread_reveal_letter = self.sio.start_background_task(target=self.reveal_letter_handler)
 
 
   def finish_game(self):
@@ -123,11 +127,18 @@ class Room():
       to=self.key
     )
 
+  def reset_tips_reveal_letter(self):
+    if self.thread_reveal_letter != False:
+      self.thread_reveal_letter.kill()
+    
+    self.amount_of_tips = 0
+    
+    
   def reveal_letter(self):
     letter_index = randint(0, len(self.answer_mask)-1)
 
     while self.answer_mask[letter_index] != '*':
-      letter_index = randint(0, len(self.answer_mask))
+      letter_index = randint(0, len(self.answer_mask)-1)
 
     word = list(self.answer_mask)
     word[letter_index] = self.answer[letter_index]
@@ -139,9 +150,9 @@ class Room():
 
 
   def reveal_letter_handler(self):
-    print('oi')
+    print('entrou no contador caraio')
     while self.round_timer.get_started() == True and self.get_percentage_reveald() <= 60:
-      print('entrou no while')
+      print('ta revelando as palavra fi')
       self.sio.sleep(15)
       self.reveal_letter()
       self.amount_of_tips += 1
