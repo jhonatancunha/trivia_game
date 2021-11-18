@@ -5,6 +5,7 @@ import jsons
 from collections import defaultdict
 from entities.room import Room
 from entities.player import Player
+from rich import inspect
 
 ROOM_KEY = '123'
 
@@ -79,8 +80,11 @@ class Server():
     room_key = session['room']
     room = self.get_room(room_key)
     player = room.get_player(sid)
+    
+    # inspect(environ, methods=True)
+    room.handler_message(message, player)
 
-    self.sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=room.get_key())
+    
 
   # @self.sio.on('getWord')
   def get_word(self, sid, environ):
@@ -93,3 +97,4 @@ class Server():
     room = self.get_room(room_key)
 
     room.set_round_word(answer, theme, hint)
+

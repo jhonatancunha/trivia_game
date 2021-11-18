@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:trivia/service/web_socket.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
 class BottomBart extends StatefulWidget {
   final Function sendMessage;
-  const BottomBart({Key? key, required this.sendMessage}) : super(key: key);
+  final WebSocket websocket;
+  const BottomBart(
+      {Key? key, required this.sendMessage, required this.websocket})
+      : super(key: key);
 
   @override
   _BottomBartState createState() => _BottomBartState();
@@ -13,6 +17,30 @@ class BottomBart extends StatefulWidget {
 class _BottomBartState extends State<BottomBart> {
   String stateMessage = '';
   final chatMessage = TextEditingController();
+  bool enableInput = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.websocket.socket.on('currentRoundPlayer', (_) {
+      setState(() {
+        enableInput = false;
+      });
+    });
+
+    widget.websocket.socket.on('roundPlayer', (_) {
+      setState(() {
+        enableInput = true;
+      });
+    });
+
+    widget.websocket.socket.on('stopCountDown', (_) {
+      setState(() {
+        enableInput = true;
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -36,12 +64,15 @@ class _BottomBartState extends State<BottomBart> {
           children: <Widget>[
             Flexible(
                 child: TextField(
+              enabled: enableInput,
               controller: chatMessage,
-              onChanged: (text) {
-                setState(() {
-                  stateMessage = text;
-                });
-              },
+              onChanged: enableInput
+                  ? (text) {
+                      setState(() {
+                        stateMessage = text;
+                      });
+                    }
+                  : null,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 filled: true,
@@ -54,7 +85,8 @@ class _BottomBartState extends State<BottomBart> {
                   borderSide:
                       BorderSide(color: HexColor('#2E303F'), width: 1.0),
                 ),
-                labelText: 'Digite aqui...',
+                labelText:
+                    enableInput ? 'Digite aqui...' : 'Você é jogador da vez...',
                 labelStyle: const TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.normal,

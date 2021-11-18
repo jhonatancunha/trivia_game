@@ -1,7 +1,7 @@
 from collections import defaultdict
 import jsons
 from random import randint
-from rich import inspect
+# from rich import inspect
 
 # ENTITIES
 from entities.player import Player
@@ -14,7 +14,6 @@ class Room():
     self.sid_list = []
     self.round = 0
     self.rounds_quantity = 1
-    self.is_round_started = False
     self.sio = sio
     self.answer = ''
     self.answer_mask = ''
@@ -39,7 +38,7 @@ class Room():
     self.players[sid] = player
     self.sid_list.append(sid)
 
-    if not self.is_round_started:
+    if not self.round_timer.get_started():
       self.rounds_quantity *= 2
 
     if len(self.players) >= 2:
@@ -66,11 +65,15 @@ class Room():
       del self.players[sid]
       del(self.sid_list[self.sid_list.index(sid)])
 
+    # DAR O STOP EM TUDO
     if len(self.players) < 2:
       self.wait_players.stop()
+      self.wait_word.stop()
+      self.round_timer.stop()
+      self.reset_tips_reveal_letter()
       self.sio.emit('stopCountDown', room=self.key)
 
-    if not self.is_round_started:
+    if not self.round_timer.get_started():
       self.rounds_quantity /= 2
 
 
@@ -115,7 +118,7 @@ class Room():
     
     self.reset_tips_reveal_letter()
 
-    inspect(self.thread_reveal_letter, methods=True)
+    # inspect(self.thread_reveal_letter, methods=True)
     self.sio.start_background_task(target=self.round_timer.start)
     self.thread_reveal_letter = self.sio.start_background_task(target=self.reveal_letter_handler)
 
@@ -167,3 +170,13 @@ class Room():
 
     self.wait_word.stop()
     self.start_round()
+
+  def handler_message(self, message, player):
+    if self.round_timer.get_started() == False:
+      self.sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=self.key)
+    else:
+      self.correct_word(message)
+  
+  
+  def correct_word(self, word):
+    print(word)
