@@ -66,13 +66,19 @@ class Server():
     room_key = session['room']
     room = self.get_room(room_key)
     player = room.get_player(sid)
-
+    nick_player = player.get_nickname()
+    
+    
+    # Caso jogador da vez sair, iniciar outro round
+    if(room.get_sid_round_player() == sid):
+      room.start_new_round()
+    
     # Removendo player da sala
     self.sio.leave_room(sid, room_key)
     room.remove_player(sid)
 
     self.sio.emit('listOfPlayers', jsons.dumps({"players": room.get_all_players()}), to=room.get_key())
-    self.sio.emit('playerLeaveTheGame', jsons.dumps({"message": " saiu da sala.", "nickname": player.get_nickname(), "type":"leave"}), room=room_key)
+    self.sio.emit('playerLeaveTheGame', jsons.dumps({"message": " saiu da sala.", "nickname": nick_player, "type":"leave"}), room=room_key)
 
 
   # @self.sio.on('sendChatMessage')
@@ -90,7 +96,7 @@ class Server():
 
   # @self.sio.on('getWord')
   def get_word(self, sid, environ):
-    answer = environ.get('answer')
+    answer = environ.get('answer').lower()
     theme = environ.get('theme')
     hint = environ.get('hint')
 

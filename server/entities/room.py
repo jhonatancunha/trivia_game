@@ -28,6 +28,7 @@ class Room():
     self.round_timer = CountDown(60, self.sio, 'roundTimer', self.key, self.round_player)
     self.thread_reveal_letter = False
     self.amount_of_right_answer = 0
+    self.sid_round_player = None
 
   def start_timer(self):
     if self.wait_players.get_started() == False:
@@ -76,6 +77,8 @@ class Room():
       self.wait_word.stop()
       self.round_timer.stop()
       self.reset_tips_reveal_letter()
+      self.rounds_quantity = 1
+      self.round = 0
       self.sio.emit('stopCountDown', room=self.key)
 
     if not self.round_timer.get_started():
@@ -84,14 +87,23 @@ class Room():
 
   def get_round_player(self):
     sid = self.sid_list[self.round % len(self.sid_list)]
+    self.sid_round_player = sid
     return self.players[sid]
 
+  def get_sid_round_player(self):
+    return self.sid_round_player
+
+  def start_new_round(self):
+    self.round_timer.stop()
+    self.round_player()
 
   def round_player(self):
     if self.round < self.rounds_quantity:
       player = self.get_round_player()
       
       self.amount_of_right_answer = 0
+      self.reset_correct_answer()
+      self.sio.emit('listOfPlayers', jsons.dumps({"players": self.get_all_players()}), to=self.key)
       
       self.sio.emit('currentRoundPlayer', to=player.get_sid())
       self.sio.emit(
@@ -109,6 +121,10 @@ class Room():
     else:
       self.finish_game()
 
+  def reset_correct_answer(self):
+    for key in self.players:
+      self.players[key].set_correct_asnwer(False)
+
 
   def start_round(self):
     self.sio.emit(
@@ -124,7 +140,6 @@ class Room():
     )
     
     self.reset_tips_reveal_letter()
-    # inspect(self.thread_reveal_letter, methods=True)
     self.sio.start_background_task(target=self.round_timer.start)
     self.thread_reveal_letter = self.sio.start_background_task(target=self.reveal_letter_handler)
 
@@ -175,14 +190,18 @@ class Room():
     self.answer_mask = ''.join(word)
 
 
-  def get_percentage_reveald(self):
-    return (self.amount_of_tips * 100) / len(self.answer)
+  def is_able_to_reveal(self):
+    if len(self.answer) < 2:
+      return False
+
+    percentage_revealed = (self.amount_of_tips * 100) / len(self.answer)
+
+    if percentage_revealed < 50:
+      return True
 
 
   def reveal_letter_handler(self):
-    print('entrou no contador caraio')
-    while self.round_timer.get_started() == True and self.get_percentage_reveald() <= 60:
-      print('ta revelando as palavra fi')
+    while self.round_timer.get_started() == True and self.is_able_to_reveal():
       self.sio.sleep(15)
       self.reveal_letter()
       self.amount_of_tips += 1
@@ -202,7 +221,7 @@ class Room():
     if self.round_timer.get_started() == False:
       self.sio.emit('messageChat', jsons.dumps({"message": message, "nickname": player.get_nickname(), "type": "chat"}), room=self.key)
     else:
-      self.correct_word(message, player)
+      self.correct_word(message.lower(), player)
   
   
   def correct_word(self, word, player):

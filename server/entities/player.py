@@ -20,7 +20,8 @@ class Player():
   def set_room(self, room):
     self.room = room
     
-    
+  def set_correct_asnwer(self, value):
+    self.correct_asnwer = value
     
   def get_sid(self):
     return self.sid
@@ -35,7 +36,7 @@ class Player():
     return self.room
   
   def right_answer(self, time, point_of_question):
-    self.correct_asnwer = True
-    self.score += point_of_question * time
+    self.set_correct_asnwer(True)
+    self.set_score(self.score + point_of_question * time)
     
   
