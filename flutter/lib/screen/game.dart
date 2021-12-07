@@ -124,8 +124,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         var score = player['score'];
         var correctAsnwer = player['correct_asnwer'];
 
-        print("corect $correctAsnwer");
-
         Player newPlayer = Player(nickname, score, correctAsnwer);
 
         if (mounted) {
@@ -275,8 +273,6 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     });
 
     websocket.socket.on('finishGame', (players) {
-      print("INICIANDO FINALIZAÇÃO DO GAME");
-
       Map<String, dynamic> topPlayersList =
           Map<String, dynamic>.from(json.decode(players)['topPlayers']);
 
@@ -304,22 +300,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         otherPlayers.add(newPlayer);
       }
 
-      print("FINALIZANDO GAME");
-
-      // print(topPlayers);
-      // print(otherPlayers);
-
-      // Navigator.pop(context);
       if (mounted) {
-        print("ta montado carai");
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   Rank(topPlayers: topPlayers, otherPlayers: otherPlayers)),
         );
-      } else {
-        print("nao ta montado carai");
       }
     });
   }
@@ -331,9 +318,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print(state);
-  }
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
 
   @override
   Widget build(BuildContext context) {

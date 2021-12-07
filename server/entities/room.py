@@ -43,7 +43,6 @@ class Room():
     self.players[sid] = player
     self.sid_list.append(sid)
 
-    print("INSERINDO PLAYER", self.sid_list, sid)
     
     if not self.round_timer.get_started():
       self.rounds_quantity *= 2
@@ -175,14 +174,11 @@ class Room():
     self.rounds_quantity = 1
     self.reset_tips_reveal_letter()
     
-    print("SID LIST", self.sid_list)
     
     while self.sid_list:
-      print("REMOVENDO", self.sid_list[0])
       self.remove_player(self.sid_list[0], gameFinished=True)
     
     
-    print("PLAYERS:", self.players, self.sid_list)
     
   def reset_tips_reveal_letter(self):
     if self.thread_reveal_letter != False:
@@ -220,7 +216,6 @@ class Room():
       self.sio.emit('revealLetter', jsons.dumps({"answer_mask": self.answer_mask}))
 
   def set_round_word(self, answer, theme, hint):
-    print(answer, theme, hint)
     self.answer = answer.strip()
     self.theme = theme
     self.hint = hint
