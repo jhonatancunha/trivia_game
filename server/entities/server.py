@@ -38,7 +38,7 @@ class Server():
 
   def start(self):
     app = socketio.WSGIApp(self.sio)
-    pywsgi.WSGIServer(('', 8000), app, handler_class=WebSocketHandler).serve_forever()
+    pywsgi.WSGIServer(('25.2.227.94', 8080), app, handler_class=WebSocketHandler).serve_forever()
   
   
   # @ssio.on('join') 

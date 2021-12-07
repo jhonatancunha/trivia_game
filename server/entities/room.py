@@ -24,7 +24,7 @@ class Room():
     self.theme = ''
     self.hint = ''
     self.wait_players = CountDown(10, self.sio, 'timer', self.key, self.round_player)
-    self.wait_word = CountDown(15, self.sio, 'waitWord', self.key, self.round_player)
+    self.wait_word = CountDown(60, self.sio, 'waitWord', self.key, self.round_player)
     self.round_timer = CountDown(60, self.sio, 'roundTimer', self.key, self.round_player)
     self.thread_reveal_letter = False
     self.amount_of_right_answer = 0
@@ -43,6 +43,8 @@ class Room():
     self.players[sid] = player
     self.sid_list.append(sid)
 
+    print("INSERINDO PLAYER", self.sid_list, sid)
+    
     if not self.round_timer.get_started():
       self.rounds_quantity *= 2
 
@@ -66,11 +68,16 @@ class Room():
       return None
   
 
-  def remove_player(self, sid):
+  def remove_player(self, sid, gameFinished=False):
     if sid in self.players:
       del self.players[sid]
-      del(self.sid_list[self.sid_list.index(sid)])
+      self.sid_list.remove(sid)
+      # del(self.sid_list[self.sid_list.index(sid)])
 
+    # SE O JOGO FINALIZOU SO REMOVE
+    if gameFinished:
+      return
+  
     # DAR O STOP EM TUDO
     if len(self.players) < 2:
       self.wait_players.stop()
@@ -168,9 +175,14 @@ class Room():
     self.rounds_quantity = 1
     self.reset_tips_reveal_letter()
     
-    for sid in self.sid_list:
-      self.remove_player(sid)
-      
+    print("SID LIST", self.sid_list)
+    
+    while self.sid_list:
+      print("REMOVENDO", self.sid_list[0])
+      self.remove_player(self.sid_list[0], gameFinished=True)
+    
+    
+    print("PLAYERS:", self.players, self.sid_list)
     
   def reset_tips_reveal_letter(self):
     if self.thread_reveal_letter != False:

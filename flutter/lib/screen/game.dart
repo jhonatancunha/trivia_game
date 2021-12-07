@@ -50,9 +50,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    setState(() {
-      _waitingMainPlayerMessage = '';
-    });
+
+    if (mounted) {
+      setState(() {
+        _waitingMainPlayerMessage = '';
+      });
+    }
+
     initSocket();
   }
 
@@ -65,43 +69,49 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
     websocket.socket.on('timer', (data) {
       var totalTimeAux = json.decode(data.toString())['total_time'];
       var timerAux = json.decode(data.toString())['time'];
-
-      setState(() {
-        timer = timerAux;
-        totalTimer = totalTimeAux;
-        _waitingPlayers = false;
-        _isGameStarted = false;
-        _isWaitingMainPlayer = false;
-        _isMainPlayer = false;
-      });
+      if (mounted) {
+        setState(() {
+          timer = timerAux;
+          totalTimer = totalTimeAux;
+          _waitingPlayers = false;
+          _isGameStarted = false;
+          _isWaitingMainPlayer = false;
+          _isMainPlayer = false;
+        });
+      }
     });
 
     websocket.socket.on('waitWord', (data) {
       var totalTimeAux = json.decode(data.toString())['total_time'];
       var timerAux = json.decode(data.toString())['time'];
-
-      setState(() {
-        _timerWaitWord = timerAux;
-        _totalTimerWaitWord = totalTimeAux;
-      });
+      if (mounted) {
+        setState(() {
+          _timerWaitWord = timerAux;
+          _totalTimerWaitWord = totalTimeAux;
+        });
+      }
     });
 
     websocket.socket.on('stopCountDown', (_) {
-      setState(() {
-        _isGameStarted = false;
-        _isWaitingMainPlayer = false;
-        _isMainPlayer = false;
-        _waitingPlayers = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isGameStarted = false;
+          _isWaitingMainPlayer = false;
+          _isMainPlayer = false;
+          _waitingPlayers = true;
+        });
+      }
     });
 
     websocket.socket.on('listOfPlayers', (players) {
@@ -117,9 +127,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         print("corect $correctAsnwer");
 
         Player newPlayer = Player(nickname, score, correctAsnwer);
-        setState(() {
-          _players.add(newPlayer);
-        });
+
+        if (mounted) {
+          setState(() {
+            _players.add(newPlayer);
+          });
+        }
       }
 
       ChatController.scrollDown();
@@ -131,9 +144,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
@@ -143,9 +158,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
@@ -155,9 +172,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
@@ -167,9 +186,11 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
@@ -179,31 +200,36 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var type = json.decode(msg.toString())['type'];
       Message objMessage = Message(nickname, message, type);
 
-      setState(() {
-        _messages.add(objMessage);
-      });
+      if (mounted) {
+        setState(() {
+          _messages.add(objMessage);
+        });
+      }
       ChatController.scrollDown();
     });
 
     websocket.socket.on('currentRoundPlayer', (_) {
-      setState(() {
-        _waitingPlayers = false;
-        _isGameStarted = false;
-        _isMainPlayer = true;
-        _isWaitingMainPlayer = false;
-      });
+      if (mounted) {
+        setState(() {
+          _waitingPlayers = false;
+          _isGameStarted = false;
+          _isMainPlayer = true;
+          _isWaitingMainPlayer = false;
+        });
+      }
     });
 
     websocket.socket.on('roundPlayer', (msg) {
       var message = json.decode(msg.toString())['message'];
-
-      setState(() {
-        _waitingPlayers = false;
-        _isGameStarted = false;
-        _isMainPlayer = false;
-        _isWaitingMainPlayer = true;
-        _waitingMainPlayerMessage = message;
-      });
+      if (mounted) {
+        setState(() {
+          _waitingPlayers = false;
+          _isGameStarted = false;
+          _isMainPlayer = false;
+          _isWaitingMainPlayer = true;
+          _waitingMainPlayerMessage = message;
+        });
+      }
     });
 
     websocket.socket.on('startRound', (data) {
@@ -213,36 +239,44 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       var currentRound = json.decode(data.toString())['current_round'];
       var nAmount = json.decode(data.toString())['n_amount'];
 
-      setState(() {
-        _isGameStarted = true;
-        _isMainPlayer = false;
-        _waitingPlayers = false;
-        _isWaitingMainPlayer = false;
-        _theme = theme;
-        _answer = answer;
-        _hint = hint;
-        _currentRound = currentRound;
-        _nAmount = nAmount;
-      });
+      if (mounted) {
+        setState(() {
+          _isGameStarted = true;
+          _isMainPlayer = false;
+          _waitingPlayers = false;
+          _isWaitingMainPlayer = false;
+          _theme = theme;
+          _answer = answer;
+          _hint = hint;
+          _currentRound = currentRound;
+          _nAmount = nAmount;
+        });
+      }
     });
 
     websocket.socket.on('roundTimer', (data) {
       var totalTimeAux = json.decode(data.toString())['total_time'];
       var timerAux = json.decode(data.toString())['time'];
 
-      setState(() {
-        _roundTimer = timerAux;
-        _totalRoundTimer = totalTimeAux;
-      });
+      if (mounted) {
+        setState(() {
+          _roundTimer = timerAux;
+          _totalRoundTimer = totalTimeAux;
+        });
+      }
     });
 
     websocket.socket.on('revealLetter', (data) {
       var answerMask = json.decode(data.toString())['answer_mask'];
 
-      setState(() => {_answer = answerMask});
+      if (mounted) {
+        setState(() => {_answer = answerMask});
+      }
     });
 
     websocket.socket.on('finishGame', (players) {
+      print("INICIANDO FINALIZAÇÃO DO GAME");
+
       Map<String, dynamic> topPlayersList =
           Map<String, dynamic>.from(json.decode(players)['topPlayers']);
 
@@ -270,15 +304,23 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         otherPlayers.add(newPlayer);
       }
 
-      print(topPlayers);
-      print(otherPlayers);
+      print("FINALIZANDO GAME");
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                Rank(topPlayers: topPlayers, otherPlayers: otherPlayers)),
-      );
+      // print(topPlayers);
+      // print(otherPlayers);
+
+      // Navigator.pop(context);
+      if (mounted) {
+        print("ta montado carai");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Rank(topPlayers: topPlayers, otherPlayers: otherPlayers)),
+        );
+      } else {
+        print("nao ta montado carai");
+      }
     });
   }
 

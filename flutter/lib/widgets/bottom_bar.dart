@@ -24,27 +24,35 @@ class _BottomBartState extends State<BottomBart> {
     super.initState();
 
     widget.websocket.socket.on('currentRoundPlayer', (_) {
-      setState(() {
-        enableInput = false;
-      });
+      if (mounted) {
+        setState(() {
+          enableInput = false;
+        });
+      }
     });
 
     widget.websocket.socket.on('roundPlayer', (_) {
-      setState(() {
-        enableInput = true;
-      });
+      if (mounted) {
+        setState(() {
+          enableInput = true;
+        });
+      }
     });
 
     widget.websocket.socket.on('stopCountDown', (_) {
-      setState(() {
-        enableInput = true;
-      });
+      if (mounted) {
+        setState(() {
+          enableInput = true;
+        });
+      }
     });
 
     widget.websocket.socket.on('youAreRight', (msg) {
-      setState(() {
-        enableInput = false;
-      });
+      if (mounted) {
+        setState(() {
+          enableInput = false;
+        });
+      }
     });
   }
 
@@ -74,9 +82,11 @@ class _BottomBartState extends State<BottomBart> {
               controller: chatMessage,
               onChanged: enableInput
                   ? (text) {
-                      setState(() {
-                        stateMessage = text;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          stateMessage = text;
+                        });
+                      }
                     }
                   : null,
               style: const TextStyle(color: Colors.white),
@@ -108,9 +118,12 @@ class _BottomBartState extends State<BottomBart> {
                       onPressed: () {
                         widget.sendMessage(stateMessage);
                         chatMessage.clear();
-                        setState(() {
-                          stateMessage = '';
-                        });
+
+                        if (mounted) {
+                          setState(() {
+                            stateMessage = '';
+                          });
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor:

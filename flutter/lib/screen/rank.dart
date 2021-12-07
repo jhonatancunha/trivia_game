@@ -253,10 +253,12 @@ class Rank extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // showDialogRoundInformations(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const InitialScreen()));
+                  Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const InitialScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   primary: HexColor("#393B4B"),
