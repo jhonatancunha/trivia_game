@@ -43,5 +43,5 @@ class Player():
     return new_score
     
   def right_answer_player_of_round(self, score):
-        self.set_score(score)
+        self.set_score(self.score + score)
 
