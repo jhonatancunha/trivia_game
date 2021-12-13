@@ -1,0 +1,23 @@
+name: Trivia Game
+version: 1.0.10
+summary: Trivia Game
+description: Trivia Game made by Jesse and Jhonatan
+confinement: strict
+base: core18
+grade: stable
+icon: snap/gui/icon.png
+
+
+apps:
+   counter:
+     command: trivia_game_br
+     extensions: [flutter-master]
+     plugs:
+       - network
+       - desktop
+
+parts:
+  counter:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application

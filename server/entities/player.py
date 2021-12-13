@@ -37,6 +37,11 @@ class Player():
   
   def right_answer(self, time, point_of_question):
     self.set_correct_asnwer(True)
-    self.set_score(self.score + point_of_question * time)
+    new_score = self.score + point_of_question * time
+    self.set_score(new_score)
     
-  
+    return new_score
+    
+  def right_answer_player_of_round(self, score):
+        self.set_score(score)
+

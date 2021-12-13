@@ -133,6 +133,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         }
       }
 
+      print(playersList);
       ChatController.scrollDown();
     });
 

@@ -235,15 +235,20 @@ class Room():
     percentage = fuzz.ratio(word, self.answer)
       
     if percentage == 100:
-      player.right_answer(self.round_timer.get_current_time(), 5)
+      p_score = player.right_answer(self.round_timer.get_current_time(), 5)
       
-      
+      p_round_owner = self.get_player(self.sid_round_player)
+      new_score = p_score * 0.5
+      p_round_owner.right_answer_player_of_round(round(new_score))
+
+            
       message = "Você acertou!"
       self.sio.emit('youAreRight', jsons.dumps({"message": message, "nickname": '', "type": "you_are_right"}), to=player.get_sid())
       message = "%s acertou!" % player.get_nickname()
       self.sio.emit('someoneIsRight', jsons.dumps({"message": message, "nickname": '', "type": "someone_is_right"}), room=self.key, skip_sid=player.get_sid())
       self.sio.emit('listOfPlayers', jsons.dumps({"players": self.get_all_players()}), to=self.key)
       
+      print("aaaaaaaaa", self.get_all_players(), "\n\n\n\n")
       
       self.amount_of_right_answer += 1
       if self.amount_of_right_answer == len(self.players)-1:

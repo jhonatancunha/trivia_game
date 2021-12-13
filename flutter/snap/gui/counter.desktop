@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0.10
+Name=Trivia Game
+Comment=Trivia Game made by Jesse and Jhonatan
+Exec=trivia_game_br
+Icon=${SNAP}/meta/gui/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;Application;
