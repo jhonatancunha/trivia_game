@@ -4,13 +4,14 @@
     <img src="img/logo.png" alt="Tela onde o jogador informará seu nickname.">
 </p>
 <h1 align="center">:pushpin: GuessTheWord - Adivinhe as Palavras <h1>
+
+
 <p align="center">
 <img src="https://img.shields.io/github/repo-size/jhonatancunha/trivia_game" alt="">
 <img src="https://img.shields.io/github/license/jhonatancunha/trivia_game" alt="">
 <img src="https://img.shields.io/github/last-commit/jhonatancunha/trivia_game" alt="">
 </p>
 
-<br>
 
 
 ## :bookmark: Sobre
