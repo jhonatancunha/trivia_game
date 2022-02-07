@@ -108,9 +108,7 @@ $ git commit -m "My changes"
 $ git push origin contribution-branch
 ```
 
-<p align="center">
-Made with :coffee: por :copyright: Jhonatan Cunha.
-</p>
+
 
 ### :mortar_board: Autores
 
@@ -131,6 +129,10 @@ Made with :coffee: por :copyright: Jhonatan Cunha.
 
 [![Gmail Badge](https://img.shields.io/badge/-jesserocha@alunos.utfpr.edu.br-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:jesserocha@alunos.utfpr.edu.br)](mailto:jesserocha@alunos.utfpr.edu.br)</td>
 </tr></table>
+
+<p align="center">
+Made with :coffee: by :copyright: Jhonatan Cunha and Jessé Pires.
+</p>
 
 <!-- ## :memo: Licença
 [MIT](https://choosealicense.com/licenses/mit/) -->
