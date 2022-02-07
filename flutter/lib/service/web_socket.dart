@@ -15,7 +15,7 @@ class WebSocket {
   void init(nickname) {
     if (!isSocketOn) {
       socket = IO.io(
-          'http://25.2.227.94:8080',
+          'http://localhost:8080',
           IO.OptionBuilder()
               .setTransports(['websocket']) //for Flutter or Dart VM
               .disableAutoConnect()
