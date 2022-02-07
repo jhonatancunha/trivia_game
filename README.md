@@ -24,7 +24,7 @@
 
 # :computer: Screenshots
 
-## :house: Tela inicial
+## :small_red_triangle_down: Tela inicial
 
 
 <p align="center">
@@ -34,7 +34,7 @@
 <p  align="center">Tela onde usuário digitará <i>nickname</i> utilizado na rodada.</p>
 
 
-## :floppy_disk: Aguardando players
+## :small_red_triangle_down: Aguardando players
 
 
 <p align="center">
@@ -44,7 +44,7 @@
 
 <p  align="center">Tela inicial do jogo, onde os players aguardaram a quantidade mínima de jogadores para iniciar a partida.</p>
 
-## :earth_americas: Informando dados da rodada
+## :small_red_triangle_down: Informando dados da rodada
 
 
 <p align="center">
@@ -54,7 +54,7 @@
 <p  align="center">Tela onde o jogador da vez informará o tema, dica e resposta da rodada.</p>
 
 
-## :earth_americas: Passou perto
+## :small_red_triangle_down: Passou perto
 
 
 <p align="center">
@@ -64,7 +64,7 @@
 <p align="center">Caso jogador digite uma palavra parecida com a resposta, aparecerá uma dica para o mesmo (Mensagem que informa que o usuário quase acertou a palavra).</p>
 
 
-## :earth_americas: Ranking
+## :small_red_triangle_down: Ranking
 
 
 <p align="center">
